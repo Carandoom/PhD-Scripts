@@ -1,13 +1,13 @@
-//////////////////////////////////////////////////////////////////////////////
-//	ImageJ/Fiji script														//
-//																			//
-//	Open images with a specific extension, separate the channels			//
-//	And save them into a separated folder with a identification number		//
-//																			//
-//	REQUIREMENTS: For ImageJ users, Bio-Formats Importer plugin is needed	//
-//																			//
-//	Christopher Henry - V1 - 2020-06-04										//
-//////////////////////////////////////////////////////////////////////////////
+//
+//	ImageJ/Fiji script
+//
+//	Open images with a specific extension, separate the channels
+//	And save them into a separated folder with a identification number
+//
+//	REQUIREMENTS: For ImageJ users, Bio-Formats Importer plugin is needed
+//
+//	Christopher Henry - V1 - 2020-06-04
+//
 
 
 // Ask for the file extension

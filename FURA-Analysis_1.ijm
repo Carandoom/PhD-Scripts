@@ -2,11 +2,11 @@
 //	ImageJ/Fiji script
 //	
 //	Originally design for analysis of FURA-2 experiments using 340 nm and 380 nm files
+//	generated from Visiview acquisition software with 2 channels recorded named "340nm" and "380nm"
 //	
-//	Open tif or stk images, they need to be individual channels
-//	Open BG and cell ROIs (Region Of Interest) to remove the BG and extract fluo from the cells
-//	Need to save the ROIs with "_BG" or "_cells" at the end of the ROI name
-//	It will export the fluorescence values in txt files
+//	Open tif or stk images and the associated BG (Background) and cell ROIs (Region Of Interest)
+//	to remove the BG and extract the average fluorescence signal from the cells ROIs
+//	It will export the average fluorescence values in txt files
 //	
 //	
 //	INSTRUCTIONS:

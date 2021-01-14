@@ -14,7 +14,7 @@
 Dialog.create("Enter File Extension");
 Dialog.addString("File Extension without \".\"", "");
 Dialog.show();
-Extension = Dialog.getString(); //".czi";
+Extension = "." + Dialog.getString();
 
 // Define path containing the files
 dir1 = getDirectory("Choose Directory Containing the Images");

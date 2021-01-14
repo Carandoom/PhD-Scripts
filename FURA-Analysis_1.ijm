@@ -19,7 +19,7 @@
 //	/!\ The ROI for the background needs to be named with "Dishxxx" directly when you save it from ImageJ/Fiji
 //	Open this script in Fiji or ImageJ (drag and drop), click on run (Ctrl + R)
 //	
-//	You can then stop here or start the second part of this script in Excel (FURA-Analysis_2.vba)
+//	You can then stop here or start the second part of this script in Excel (FURA-Analysis_2.xlsm)
 //	Works only for FURA-2 experiments with 340 nm and 380 nm files
 //	
 //	

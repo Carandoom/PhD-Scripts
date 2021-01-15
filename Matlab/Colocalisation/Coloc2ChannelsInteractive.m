@@ -1,4 +1,4 @@
-function ColocStack_Amado()
+function Coloc2ChannelsInteractive()
 	%	
 	%	Script to get colocalization statistics
     %	Made to work in batch mode using still images of 2 channels

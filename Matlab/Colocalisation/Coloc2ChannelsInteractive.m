@@ -2,12 +2,11 @@
 	%	Script to get colocalization statistics
 	%	Made to work in batch mode using still images of 2 channels
 	%	You need to select all the images of the first channel
-	%		then all of the second channel
-	%	They will be paired by alphabetical order
+	%	then all of the second channel. They will be paired by alphabetical order
 	%	You can set the threshold for each channel and apply it
 	%	A potential issue is the image treatment done withing the script,
-	%   it might reduce a lot the signal, if it does so, you will need
-	%   to change/remove the image processing part of the script
+	%	it might reduce a lot the signal, if it does so, you will need
+	%	to change/remove the image processing part of the script
 	%	
 	%	Guidelines:
 	%		1) For a given series of images, select all the images from channel 1

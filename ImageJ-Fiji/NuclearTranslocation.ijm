@@ -2,9 +2,12 @@
 //	ImageJ/Fiji script
 //	
 //	Macro to analyse the translocation of NFAT from cytosol to the nucleus
+//	It should work for any other fluorescent molecule that you want to check the nucleus translocation
 //	Need a DAPI image stored into a "1_DAPI" folder to identify each cell and its nucleus
 //	Need a NFAT image stored into a "2_NFAT" folder to get the NFAT signal and see if it's inside the nucleus or not
-//	You end up with txt files containing the integrated pixel values withing each cells
+//	You end up with txt files containing the integrated pixel values withing each cells for series "A" and "B"
+//	"A" correspond to the cytosol + nucleus signal
+//	"B" correspond to the nucleus signal only
 //	ImageJ/Fiji gives you two numbers, first is "IntDen" and the second is "RawIntDen"
 //	Refer to ImageJ/Fiji documentation for further information
 //	

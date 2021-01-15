@@ -32,7 +32,7 @@ list3 = getFileList(dir3);
 
 dir4 = dir1 + "3_ROIs\\";
 if (File.exists(dir4)!=1) {
-	File.makeDirectory(dir2);
+	File.makeDirectory(dir4);
 }
 
 // Set the measurements settings

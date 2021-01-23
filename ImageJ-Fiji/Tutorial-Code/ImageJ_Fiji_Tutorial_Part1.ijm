@@ -14,6 +14,8 @@
 
 //---------------------------------------------------------------------//
 
+//---------------------------------------------------------------------//
+
 //		Before starting
 //	To write code in ImageJ/Fiji, you just need a text file that you
 //	can drag into ImageJ/Fiji window and then Run the code from there.
@@ -21,6 +23,8 @@
 //	when you want to do some automatisation of the same process you
 //	usually do over and over, it will show you how to write the code
 //	needed to do what you did manually.
+
+//---------------------------------------------------------------------//
 
 //---------------------------------------------------------------------//
 
@@ -42,6 +46,8 @@ print("Hello World");
 
 //---------------------------------------------------------------------//
 
+//---------------------------------------------------------------------//
+
 //		Part 1.2
 //	Here we will open a file from ImageJ/Fiji, the way to do it is
 //	via a function available in ImageJ/Fiji. This function is called
@@ -49,9 +55,9 @@ print("Hello World");
 //	you want to open. Don't forget to put the extension of the file
 //	at the end of its name if you write it manually. For this exercice
 //	we will write the path of the file and its extention into the
-//	function open. You can download the file "ImageJ_Fiji_File1.stk"
+//	function open. You can download the file "ImageJ_Fiji_File1.tif"
 
-open("C:\\Users\\henryc\\Desktop\\ImageJ_Fiji_Tutorial\\Part1\\ImageJ_Fiji_File1.stk");
+open("C:\\Users\\henryc\\Desktop\\ImageJ_Fiji_Tutorial\\Part1\\ImageJ_Fiji_File1.tif");
 
 //	You can see something curious, instead of a single "\" there is a
 //	double "\\". The reason is because the single one is used to insert
@@ -61,6 +67,8 @@ open("C:\\Users\\henryc\\Desktop\\ImageJ_Fiji_Tutorial\\Part1\\ImageJ_Fiji_File1
 //	languages). So here we opened a specific file in a given folder
 //	but it is possible to use functions to choose the folder and
 //	extract all the files withing it.
+
+//---------------------------------------------------------------------//
 
 //---------------------------------------------------------------------//
 
@@ -99,6 +107,8 @@ open(dir1+list1[0]);
 
 //---------------------------------------------------------------------//
 
+//---------------------------------------------------------------------//
+
 //		Part 1.4
 //	Now, what if you want to open many files one after the other ? There
 //	is different ways to do it, a common one is via loops. There is
@@ -120,6 +130,8 @@ open(dir1+list1[0]);
 for (i=0; i<5; i++) {
 	print("Test"+i);
 }
+
+//---------------------------------------------------------------------//
 
 //---------------------------------------------------------------------//
 
@@ -151,6 +163,8 @@ for (i=0; i<list1.length; i++) {
 
 //---------------------------------------------------------------------//
 
+//---------------------------------------------------------------------//
+
 //		Part 1.6
 //	Usually, in a folder you don't have only files you want to open to
 //	work with them, it could be that some files are Excel or that you
@@ -172,7 +186,7 @@ list1 = getFileList(dir1);
 //	We can use the function called "endsWith(string, suffix)", it takes
 //	two arguments as inputs, "string" which is in what you look for 
 //	and "suffix" which is what you are looking for in "string".
-//	This way we can get list1[i] and see if we find ".stk" which
+//	This way we can get list1[i] and see if we find ".tif" which
 //	is the file extension we are looking for.
 //	If the function endsWith find the "suffix" in "string", the result
 //	of this function is "true" or 1. If it does not find it, it returns
@@ -180,15 +194,17 @@ list1 = getFileList(dir1);
 //	the file only if it ends with the extension we are interested in.
 
 for (i=0; i<list1.length; i++) {
-	if (endsWith(list1[i],".stk")>=1) {
+	if (endsWith(list1[i],".tif")>=1) {
 		A = dir1+list1[i];
 		open(A);
 	}
 }
 
 //	If you want to test the opening of multiple files with this code
-//	example, you can duplicate the "ImageJ_Fiji_File1.stk" file and
+//	example, you can duplicate the "ImageJ_Fiji_File1.tif" file and
 //	see if you manage to open all these files with the script we just
 //	wrote.
+
+//---------------------------------------------------------------------//
 
 //---------------------------------------------------------------------//

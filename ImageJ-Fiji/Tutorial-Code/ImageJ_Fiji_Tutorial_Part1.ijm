@@ -122,3 +122,35 @@ for (i=0; i<5; i++) {
 
 //---------------------------------------------------------------------//
 
+//		Part 1.5
+//	From what we have seen so far, we can now write a code that will
+//	open files in a batch mode. To do so we need to use again this code.
+
+title = "Choose Directory Containing the Images";
+dir1 = getDirectory(title);
+list1 = getFileList(dir1);
+
+//	And now we need to add a loop to open all the files within this
+//	folder. There is an interesting feature associated to the lists,
+//	you can extract the lenght of it via a "method". To make it simple,
+//	a method is like a function but associated to an object, here the list.
+//	This method is called "list.length" and return the length of the list.
+//	This length correspond to the number of files it contains. For each
+//	file of the list, we will do the commands inside the loop "for". First,
+//	we define "A" as variable containing the path and the file name. The
+//	variable "A" will get updated at the beginning of each loop and will
+//	contain the path + the name of the file to open. After, we use the
+//	function "open()" associated with the variable "A". This way, the
+//	files are going to be opened one by one, one after the other.
+
+for (i=0; i<list1.length; i++) {
+	A = dir1+list1[i];
+	open(A);
+}
+
+//---------------------------------------------------------------------//
+
+
+
+
+

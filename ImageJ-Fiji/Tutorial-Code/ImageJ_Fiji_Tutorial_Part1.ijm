@@ -54,7 +54,7 @@ open("C:\\Users\\henryc\\Desktop\\ImageJ_Fiji_Tutorial\\Part1\\ImageJ_Fiji_File1
 
 //	You can see something curious, instead of a single "\" there is a
 //	double "\\". The reason is because the single one is used to insert
-//	special caracters such as ". Note also that here we don't have
+//	special characters such as ". Note also that here we don't have
 //	spaces in the path name but it is possible to include them without
 //	any problem (which is not always the case in other programming
 //	languages). So here we opened a specific file in a given folder
@@ -63,3 +63,8 @@ open("C:\\Users\\henryc\\Desktop\\ImageJ_Fiji_Tutorial\\Part1\\ImageJ_Fiji_File1
 
 //---------------------------------------------------------------------//
 
+
+
+dir1 = getDirectory("Choose Directory Containing the Images");
+list1 = getFileList(dir1);
+open(dir1+file1[0]);

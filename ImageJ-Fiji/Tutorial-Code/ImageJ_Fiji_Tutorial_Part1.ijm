@@ -97,3 +97,28 @@ open(dir1+list1[0]);
 //	you will discover with the time.
 
 //---------------------------------------------------------------------//
+
+//		Part 1.4
+//	Now, what if you want to open many files one after the other ? There
+//	is different ways to do it, a common one is via loops. There is
+//	different way to create loops and here we will see the "for" method.
+//	The idea is to do something in a repetitive manner for a number of 
+//	time or until a condition is reached. What we do here is to say we
+//	want to create a variable called "i" that start with a value of zero.
+//	And we want the loop to end when i = 5. At each loop, we increase the
+//	value of "i" by one. It is indicated by "i++" which means we add 1
+//	to i at the end of the loop. You can see that the loop is defined
+//	after "for" by "{" ... "}". What is inside these signs are the 
+//	commands that are going to be repeated at each loop. An advantage
+//	is that you can use i as a variable that changes every loop and this
+//	way you can do something different each loop.
+//	In this example we just print a string "Test" associated to the
+//	variable "i" changing every loop. We will obtain 5 lines of Test
+//	values from "Test0" to "Test4".
+
+for (i=0; i<5; i++) {
+	print("Test"+i);
+}
+
+//---------------------------------------------------------------------//
+

@@ -11,6 +11,7 @@
 //	1.5:
 //	
 
+//---------------------------------------------------------------------//
 
 //		Before starting
 //	To write code in ImageJ/Fiji, you just need a text file that you
@@ -20,6 +21,7 @@
 //	usually do over and over, it will show you how to write the code
 //	needed to do what you did manually.
 
+//---------------------------------------------------------------------//
 
 //		Part 1.1
 //	First step, learn the synthax in ImageJ, a comment (not taking 
@@ -37,6 +39,7 @@
 
 print("Hello World");
 
+//---------------------------------------------------------------------//
 
 //		Part 1.2
 //	Here we will open a file from ImageJ/Fiji, the way to do it is
@@ -58,5 +61,5 @@ open("C:\\Users\\henryc\\Desktop\\ImageJ_Fiji_Tutorial\\Part1\\ImageJ_Fiji_File1
 //	but it is possible to use functions to choose the folder and
 //	extract all the files withing it.
 
-
+//---------------------------------------------------------------------//
 

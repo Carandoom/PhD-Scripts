@@ -36,3 +36,27 @@
 //	that will end with "{" instead of ";" as we will see later.
 
 print("Hello World");
+
+
+//		Part 1.2
+//	Here we will open a file from ImageJ/Fiji, the way to do it is
+//	via a function available in ImageJ/Fiji. This function is called
+//	"open()" and needs an argument which is here the path of the file
+//	you want to open. Don't forget to put the extension of the file
+//	at the end of its name if you write it manually. For this exercice
+//	we will write the path of the file and its extention into the
+//	function open. You can download the file "ImageJ_Fiji_File1.stk"
+
+open("C:\\Users\\henryc\\Desktop\\ImageJ_Fiji_Tutorial\\Part1\\ImageJ_Fiji_File1.stk");
+
+//	You can see something curious, instead of a single "\" there is a
+//	double "\\". The reason is because the single one is used to insert
+//	special caracters such as ". Note also that here we don't have
+//	spaces in the path name but it is possible to include them without
+//	any problem (which is not always the case in other programming
+//	languages). So here we opened a specific file in a given folder
+//	but it is possible to use functions to choose the folder and
+//	extract all the files withing it.
+
+
+

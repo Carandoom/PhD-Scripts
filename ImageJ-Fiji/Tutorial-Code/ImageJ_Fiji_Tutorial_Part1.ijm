@@ -150,7 +150,44 @@ for (i=0; i<list1.length; i++) {
 
 //---------------------------------------------------------------------//
 
+//		Part 1.6
+//	Usually, in a folder you don't have only files you want to open to
+//	work with them, it could be that some files are Excel or that you
+//	also have subfolders. The approach we used will try to open each
+//	element within the folder we selected. To avoid errors we can add
+//	a condition to open only the files corresponding to the images we
+//	are interested in.
+//	The way to do it is via the "if" statement, you can use it to test
+//	a condition and do a series of command only if the conditions is
+//	meet (true) or something else if the condition is not meet (false).
+//	Again, we start by choosing our folder and extract the file list.
 
+title = "Choose Directory Containing the Images";
+dir1 = getDirectory(title);
+list1 = getFileList(dir1);
 
+//	We create a for loop as we done previously but we will add a way
+//	to detect the extension of the element stored into our list1.
+//	We can use the function called "endsWith(string, suffix)", it takes
+//	two arguments as inputs, "string" which is in what you look for 
+//	and "suffix" which is what you are looking for in "string".
+//	This way we can get list1[i] and see if we find ".stk" which
+//	is the file extension we are looking for.
+//	If the function endsWith find the "suffix" in "string", the result
+//	of this function is "true" or 1. If it does not find it, it returns
+//	"false" or 0. And now we have a condition that allows us to open
+//	the file only if it ends with the extension we are interested in.
 
+for (i=0; i<list1.length; i++) {
+	if (endsWith(list1[i],".stk")>=1) {
+		A = dir1+list1[i];
+		open(A);
+	}
+}
 
+//	If you want to test the opening of multiple files with this code
+//	example, you can duplicate the "ImageJ_Fiji_File1.stk" file and
+//	see if you manage to open all these files with the script we just
+//	wrote.
+
+//---------------------------------------------------------------------//

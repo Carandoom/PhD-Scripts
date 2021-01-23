@@ -2,13 +2,14 @@
 //	ImageJ/Fiji
 //	
 //	Tutorial to create scripts in ImageJ/Fiji
-//	Part 1
 //	
-//	1.1:
-//	1.2:
-//	1.3:
-//	1.4:
-//	1.5:
+//	Part 1
+//	1.1: Synthax, comments and print function
+//	1.2: Open file
+//	1.3: Select folder and extract files
+//	1.4: Loop for
+//	1.5: Open files in a batch
+//	1.6: Open files in a batch upon condition
 //	
 
 //---------------------------------------------------------------------//

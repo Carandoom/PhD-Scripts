@@ -6,6 +6,9 @@
 //	Then segmentate the second channel based on the desired threshold,
 //	measure the mean intensity signal on the first channel and save
 //	the results in a text file.
+//	To note, it's not possible to duplicate your stack and run again the
+//	script, it will not automatically detect the file path and won't save
+//	the intensity signal.
 //	
 //	Christopher Henry - V1 - 2021-01-28
 //	

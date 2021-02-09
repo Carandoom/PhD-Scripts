@@ -6,5 +6,5 @@
 % on different parameters
 %
 
-
+openExample('nnet/classify_wine_demo');
 

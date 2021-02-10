@@ -22,20 +22,28 @@ clc
 [f,ax,ylimPlot] = CreateFigure(T,x);
 
 waitfor(findobj('Tag','bNxt')); %   Pause until range selected
+tic
 
-[T2] = FindPositiveSlope(f,T,x);
+[dydx] = FindPositiveSlope(f,T,x);
 
 %%  Extract longest slope and fit linear regression
-Parameters = zeros(2,size(T,2));
+Parameters = NaN(2,size(T,2));
+ax(2).Visible = 'on';
 for i = 1:size(T,2)
+    if isnan(T(1,i))
+        continue
+    end
     try
-        pause(0.1);
+        pause(1);
         plot(ax(1),x,T(:,i),'Color', 'b');
+        plot(ax(2),x,dydx(:,i),'Color', 'b');
         ylimPlot = ylim(ax(1));
-        [Parameters] = FindLongestSlope(ax,T,x,T2,i,Parameters);
+        [Parameters] = FindLongestSlope(ax,T,x,dydx,i,Parameters);
+        ylim(ax(1),[ylimPlot(1) ylimPlot(2)]);
+        
     catch
     end
-        [int2str(i) ' out of ' int2str(size(T,2))]
+        disp([int2str(i) ' out of ' int2str(size(T,2))])
 end
 ylim([ylimPlot(1) ylimPlot(2)]);
 
@@ -47,9 +55,11 @@ ylim([ylimPlot(1) ylimPlot(2)]);
 % hold off
 
 %% Write data in txt
-fileID = fopen('Slope_2021-02-03.txt','w');
+fileID = fopen('Slope_DataTest2.txt','w');
 fprintf(fileID,'%f\n',Parameters(1,2:end));
 fclose(fileID);
+
+toc
 
 close all
 end
@@ -57,7 +67,7 @@ end
 
 function [T,x] = OpenFile()
     cd 'C:\Users\henryc\Desktop\GitHub\Matlab find slope'
-    T = readtable('2021-02-03.txt');
+    T = readtable('DataTest2.txt');
     T = table2array(T);
     x = T(:,1);
     T = T(:,2:end);
@@ -152,29 +162,28 @@ function DeleteElements(f)
     txt1 = findobj('Tag','txt1');
     txt2 = findobj('Tag','txt2');
     bNxt = findobj('Tag','bNxt');
+    CheckBox1 = findobj('Tag','CheckBox1');
     if round(uit1.Value)>round(uit2.Value)
         warndlg('Min value must be lower than Max value','Error range value')
         return
     end
-    f.UserData = [round(uit1.Value) round(uit2.Value)];
+    f.UserData = [round(uit1.Value) round(uit2.Value) CheckBox1.Value;];
     uit1.delete
     uit2.delete
     txt1.delete
     txt2.delete
     bNxt.delete
+    CheckBox1.delete
 end
 
-function [T2] = FindPositiveSlope(f,T,x)
+function [dydx] = FindPositiveSlope(f,T,x)
     [FirstN, LastN] = GetRangeSlope(f,x);
-    [dydx] = FirstDerivative(T,x);
-    T2 = T;
-    NegOrPos = findobj('Tag','CheckBox1');
-    if NegOrPos.Value == 1
-        T2(dydx<=0) = 0;
-    elseif NegOrPos.Value == 0
-        T2(dydx>=0) = 0;
+    [dydx] = FirstDerivativeSmooth(T,x);
+    if f.UserData(3) == 1
+        dydx = -dydx;
     end
-    T2([1:FirstN LastN:end],:) = 0;
+    dydx(dydx<=0) = 0;
+    dydx([1:FirstN LastN:end],:) = 0;
 end
 function [FirstN, LastN] = GetRangeSlope(f,x)
     FirstN = f.UserData(1);
@@ -182,38 +191,49 @@ function [FirstN, LastN] = GetRangeSlope(f,x)
     [~, FirstN] = min(abs(x-FirstN));
     [~, LastN] = min(abs(x-LastN));
 end
-function [dydx] = FirstDerivative(T,x)
+function [dydx] = FirstDerivativeSmooth(T,x)
     dydx = zeros(size(T,1), size(T,2));
     for i = 1:size(T,2)
         dydx(:,i) = gradient(T(:,i)) ./ gradient(x);
+        dydx(:,i) = smooth(dydx(:,i),10);
     end
 end
 
-function [Parameters] = FindLongestSlope(ax,T,x,T2,i,Parameters)
-    zpos = find(~[0 T2(:,i)' 0]);
+function [Parameters] = FindLongestSlope(ax,T,x,dydx,i,Parameters)
+    zpos = find(~[0 dydx(:,i)' 0]);
     [~, grpidx] = max(diff(zpos));
-    y = T2(zpos(grpidx):zpos(grpidx+1)-2,i);
     
-    [Parameters] = LinearFit(ax,T,x,zpos,grpidx,i,Parameters);
+    [Parameters] = LinearFit(ax,T,x,dydx,zpos,grpidx,i,Parameters);
 end
-function [Parameters] = LinearFit(ax,T,x,zpos,grpidx,i,Parameters)
+function [Parameters] = LinearFit(ax,T,x,dydx,zpos,grpidx,i,Parameters)
     val1 = zpos(grpidx);
     val2 = zpos(grpidx+1)-2;
-    val3 = round((val2-val1)/4);
-    try
-        mdl = fitlm(x(val1+val3:val2-val3),T(val1+val3:val2-val3,i));
-    catch
-    end
+    [FitValY,ThrGaussFit] = HalfNormGaussFDeriv(x,dydx,i,val1,val2);
+    
+    mdl = fitlm(x(find(FitValY>=ThrGaussFit)+val1),...
+        T(find(FitValY>=ThrGaussFit)+val1,i));
+    
     Parameters(1,i) = mdl.Coefficients.Estimate(2);
-    PlotLinearFit(ax,T,x,val1,val2,val3,i,mdl)
+    PlotLinearFit(ax,T,x,dydx,val1,val2,i,mdl,FitValY,ThrGaussFit)
 end
-function [] = PlotLinearFit(ax,T,x,val1,val2,val3,i,mdl)
-    line(ax(1),x(val1+val3:val2-val3),...
-        T(val1+val3:val2-val3,i),...
+function [FitValY,ThrGaussFit] = HalfNormGaussFDeriv(x,dydx,i,val1,val2)
+    NormFit = fit(x(val1:val2),dydx(val1:val2,i),'gauss2');
+    FitValY = NormFit(x(val1:val2));
+    ThrGaussFit = min(FitValY)+(max(FitValY)-min(FitValY))/2;   
+end
+function [] = PlotLinearFit(ax,T,x,dydx,val1,val2,i,mdl,FitValY,ThrGaussFit)
+    line(ax(1),x(find(FitValY>=ThrGaussFit)+val1),...
+        T(find(FitValY>=ThrGaussFit)+val1,i),...
         'Marker','o',...
         'Color','r',...
         'LineStyle','none');
     line(ax(1),x(val1:val2),...
         mdl.Coefficients.Estimate(2).*x(val1:val2)+mdl.Coefficients.Estimate(1),...
         'Color','k');
+    
+    line(ax(2),x(find(FitValY>=ThrGaussFit)+val1),...
+        dydx(find(FitValY>=ThrGaussFit)+val1,i),...
+        'Marker','o',...
+        'Color','r',...
+        'LineStyle','none');
 end

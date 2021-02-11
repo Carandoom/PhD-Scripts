@@ -18,7 +18,7 @@ close all
 clear
 clc
 
-[T,x] = OpenFile();
+[T,x,path,filename] = OpenFile();
 [f,ax,ylimPlot] = CreateFigure(T,x);
 
 waitfor(findobj('Tag','bNxt')); %   Pause until range selected
@@ -26,7 +26,7 @@ tic
 
 [dydx] = FindPositiveSlope(f,T,x);
 
-%%  Extract longest slope and fit linear regression
+%  Extract longest slope and fit linear regression
 Parameters = NaN(2,size(T,2));
 ax(2).Visible = 'on';
 for i = 1:size(T,2)
@@ -34,48 +34,52 @@ for i = 1:size(T,2)
         continue
     end
     try
-        pause(1);
+        pause(0.1);
         plot(ax(1),x,T(:,i),'Color', 'b');
         plot(ax(2),x,dydx(:,i),'Color', 'b');
         ylimPlot = ylim(ax(1));
         [Parameters] = FindLongestSlope(ax,T,x,dydx,i,Parameters);
         ylim(ax(1),[ylimPlot(1) ylimPlot(2)]);
-        
     catch
     end
         disp([int2str(i) ' out of ' int2str(size(T,2))])
 end
 ylim([ylimPlot(1) ylimPlot(2)]);
 
-%%  Plot Parameters
-% ax(2).Visible = 'on';
-% boxplot(Parameters(1,:));
-% hold on
-% scatter(repmat(1,1,size(T,2)),Parameters(1,:));
-% hold off
+%  Plot Parameters
+boxplot(ax(2),Parameters(1,:));
+hold on
+scatter(ones(1,size(T,2)),Parameters(1,:));
+hold off
 
-%% Write data in txt
-fileID = fopen('Slope_DataTest2.txt','w');
+% Write data in txt
+fileID = fopen([path 'Slope_' filename],'w');
 fprintf(fileID,'%f\n',Parameters(1,2:end));
 fclose(fileID);
 
 toc
-
-close all
 end
 
 
-function [T,x] = OpenFile()
+function [T,x,path,filename] = OpenFile()
     cd 'C:\Users\henryc\Desktop\GitHub\Matlab find slope'
-    T = readtable('DataTest2.txt');
+    [filename, path] = uigetfile('*.*', ...
+        'MultiSelect', 'off');
+    T = readtable([path filename]);
     T = table2array(T);
     x = T(:,1);
     T = T(:,2:end);
     [T] = MedSmoothData(T);
+%     [T] = SmoothData(T);
 end
 function [T] = MedSmoothData(T)
     MedLen = 5;
     T = medfilt2(T,[MedLen 1]);
+end
+function [T] = SmoothData(T)
+    for i = 1:size(T,2)
+        T(:,i) = smooth(T(:,i));
+    end
 end
 
 function [f,ax,ylimPlot] = CreateFigure(T,x)
@@ -95,6 +99,7 @@ function [ylimPlot] = PlotAllData(ax,T,x)
         T,...
         'Color', 'b');
     ylimPlot = ylim(ax(1));
+    xlim(ax(1),[x(1), x(end)]);
 end
 function [] = AddSlider(f,ValMin,ValMax)
     txt1 = uicontrol(f, ...
@@ -111,7 +116,7 @@ function [] = AddSlider(f,ValMin,ValMax)
         'Tag', 'uit1', ...
         'Min', ValMin, ...
         'Max', ValMax, ...
-        'Value', 50, ...
+        'Value', ValMin, ...
         'Units', 'normalized', ...
         'Position', [0.13, 0.4, 0.775, 0.06] ...
         );
@@ -129,7 +134,7 @@ function [] = AddSlider(f,ValMin,ValMax)
         'Tag', 'uit2', ...
         'Min', ValMin, ...
         'Max', ValMax, ...
-        'Value', 150, ...
+        'Value', ValMax, ...
         'Units', 'normalized', ...
         'Position', [0.13, 0.3, 0.775, 0.06] ...
         );

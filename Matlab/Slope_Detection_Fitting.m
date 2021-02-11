@@ -54,7 +54,7 @@ hold off
 
 % Write data in txt
 fileID = fopen([path 'Slope_' filename],'w');
-fprintf(fileID,'%f\n',Parameters(1,2:end));
+fprintf(fileID,'%f\n',Parameters(1,:));
 fclose(fileID);
 
 toc

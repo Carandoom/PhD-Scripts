@@ -10,7 +10,11 @@
 %       as x values whereas all the other columns are stored into T and
 %       used as y values.
 %   
-
+%   Example on a negative slop to find, upper graph is the trace to fit
+%   and the bottom on is the first derivative. The red dots are the ones
+%   taken into account for the linear regression.
+%       Youtube link: https://youtu.be/a8gxQElWiVE
+%   
 
 function FindSlope()
 

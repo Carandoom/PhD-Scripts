@@ -1,6 +1,7 @@
 %	
 %	Need dot separated numbers in the original txt file
-%	add: converter from comma to dot numbers
+%   
+%	To add: converter from comma to dot numbers
 %   Take the DELTA from the beginning and end of the slope
 %   Adjust the slope to not take into account the flat parts
 %   Add filter for time section to work in

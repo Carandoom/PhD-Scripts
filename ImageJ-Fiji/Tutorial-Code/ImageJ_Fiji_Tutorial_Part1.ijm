@@ -29,8 +29,8 @@
 //---------------------------------------------------------------------//
 
 //		Part 1.1
-//	First step, learn the synthax in ImageJ, a comment (not taking 
-//	into account by thescript) is marked with "//". Another way to
+//	First step, learn the synthax in ImageJ, a comment (not taken 
+//	into account by the script) is marked with "//". Another way to
 //	create a comment block is by starting a line with /* and end the
 //	block of comments with */.
 //	Here you can see a very simple function to write something into

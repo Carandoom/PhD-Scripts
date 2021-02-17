@@ -1,3 +1,4 @@
-# Tutorial to start coding using ImageJ/Fiji
+# Tutorial ImageJ/Fiji
 
-# Level: beginner
+Tutorial to start coding using ImageJ/Fiji
+Level: beginner

@@ -7,7 +7,13 @@
 % It is possible to use some dataset from EMPIAR:
 % https://www.ebi.ac.uk/pdbe/emdb/empiar/
 % https://www.ebi.ac.uk/pdbe/emdb/empiar/entry/10592/
-% 
+%  
+% I will start by using my own dataset because it focuses on endoplasmic reticulum area
+% and the contrast is high so it should facilitate the detection.
+%
+%
+%
+%
 
 
 

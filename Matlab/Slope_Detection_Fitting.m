@@ -16,6 +16,9 @@
 %   taken into account for the linear regression.
 %       Youtube link: https://youtu.be/a8gxQElWiVE
 %   
+%   Christopher HENRY - V1 - 2021-02-11
+%   
+
 
 function FindSlope()
 

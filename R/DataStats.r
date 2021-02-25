@@ -24,5 +24,6 @@ plot(x=NULL, y=NULL,
 for (i in 1:ncol(T)) {
   lines(x,T[,i], col="black")
 }
-lines(x,MeanY, col="red", type = "l", lwd=4,)
-arrows(x0=x,y0=MeanY-MeanY.sd,x1=x,y1=MeanY+MeanY.sd,code=3,angle=90,length=0.1)
+lines(x,MeanY, col="red", type = "l", lwd=5,)
+arrows(x0=x,y0=MeanY-MeanY.sd,x1=x,y1=MeanY+MeanY.sd,
+       code=3,angle=90,length=0.05,col="blue")

@@ -48,19 +48,16 @@ for (i=0; i<NbImages-2; i++) {
   	//	Do the difference of image i+1 and i+2
 	imageCalculator("Difference create", ImageName1, ImageName2);
 	rename("Stack-" + i+1);
-	run("Subtract...", "value=254 stack");
 	roiManager("Select", 0);
-	roiManager("Measure");
-  	
-	
-	
+	roiManager("Measure");	
 }
 
 close(ImageName+"*");
 roiManager("Deselect");
 roiManager("Delete");
 
-run("Images to Stack", "name=TEST title=Stack use");
+run("Images to Stack", "name=" + ImageName + " title=Stack use");
+run("Subtract...", "value=254 stack");
 run("Enhance Contrast", "saturated=0.35");
 
 

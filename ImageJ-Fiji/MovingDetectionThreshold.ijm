@@ -11,6 +11,10 @@
 //	Settings and file extension
 close("Log");
 close("Results");
+if (nImages()>1) {
+	print("ERROR, only one stack can be open, close the other images and start again");
+	exit
+}
 if (roiManager("count")>0) {
 	roiManager("deselect");
 	roiManager("delete");

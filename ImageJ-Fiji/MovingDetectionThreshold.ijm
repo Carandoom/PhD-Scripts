@@ -9,13 +9,29 @@
 //
 
 //	Settings and file extension
+close("Log");
+close("Results");
+if (roiManager("count")>0) {
+	roiManager("deselect");
+	roiManager("delete");
+}
 run("Set Measurements...", "integrated redirect=None decimal=2");
 Extension = ".nd2";
 
 //	Get title, gaussian blur and prepare threshold
 ImageName = getTitle();
 selectWindow(ImageName);
+rename("Temp");
+
 run("Gaussian Blur...", "sigma=2 stack");
+run("Duplicate...", "title=BG duplicate");
+run("Gaussian Blur...", "sigma=75 stack");
+imageCalculator("Subtract create stack", "Temp", "BG");
+rename(ImageName);
+
+close("BG");
+close("Temp");
+
 run("Threshold...");
 setAutoThreshold("Default dark");
 waitForUser("Threshold", "Check the Threshold then press ok");

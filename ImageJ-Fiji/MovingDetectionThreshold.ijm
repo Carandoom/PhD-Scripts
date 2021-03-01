@@ -39,11 +39,16 @@ for (i=0; i<NbImages-2; i++) {
 	else if (i+2>=10) {
 			ImageName2 = ImageName + "-00" + i+2;
 		}
-  
-	selectWindow();
-  run("Create Mask");
+  	
+	//	Create masks based on thresholds
+	selectWindow(ImageName1);
+  	setThreshold(lower, upper);
+	run("Create Mask");
 	rename("Mask1");
-	
+	selectWindow(ImageName2);
+  	setThreshold(lower, upper;
+	run("Create Mask");
+	rename("Mask2");
   
 }
 

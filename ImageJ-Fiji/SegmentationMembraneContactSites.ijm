@@ -8,6 +8,7 @@
 //  I need to put single channel .tif into folder 1_Images
 //  and to have a folder architecture as such:
 //    MainDirectory: 1_Images / 2_ROIs / 3_Analysis
+//    1_Images: TIRF_Images
 //    2_ROIs: 1_cells / 2_MCS / 3_BG
 //  
 //  Christopher Henry - V1 - 2020/03/21

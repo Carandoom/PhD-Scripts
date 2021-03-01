@@ -8,7 +8,8 @@
 //	Christopher Henry - V1 - 2021-03-01
 //
 
-//	File extension
+//	Settings and file extension
+run("Set Measurements...", "integrated redirect=None decimal=2");
 Extension = ".nd2";
 
 //	Get title and prepare threshold
@@ -30,21 +31,26 @@ NbImages = nImages();
 for (i=0; i<NbImages-2; i++) {
   //	Get image name in the right order
 	if (i+1<10) {
-			ImageName1 = ImageName + "-000" + i+1;
-		}
+		ImageName1 = ImageName + "-000" + i+1;
+	}
 	else if (i+1>=10) {
-			ImageName1 = ImageName + "-00" + i+1;
-		}
+		ImageName1 = ImageName + "-00" + i+1;
+	}
   	if (i+2<10) {
-			ImageName2 = ImageName + "-000" + i+2;
-		}
+		ImageName2 = ImageName + "-000" + i+2;
+	}
 	else if (i+2>=10) {
-			ImageName2 = ImageName + "-00" + i+2;
-		}
-  	
-	imageCalculator("Difference create", ImageName1, ImageName2);
+		ImageName2 = ImageName + "-00" + i+2;
+	}
 	
+  	//	Do the difference of image i+1 and i+2
+	imageCalculator("Difference create", ImageName1, ImageName2);
+	rename("Stack-" + i+1);
+	roiManager("Select", 0);
+	roiManager("Measure");
   	
+	
+	
 }
 
 

@@ -12,9 +12,11 @@
 run("Set Measurements...", "integrated redirect=None decimal=2");
 Extension = ".nd2";
 
-//	Get title and prepare threshold
+//	Get title, gaussian blur and prepare threshold
 ImageName = getTitle();
 selectWindow(ImageName);
+run("Gaussian Blur...", "sigma=2 stack");
+run("Threshold...");
 setAutoThreshold("Default dark");
 waitForUser("Threshold", "Check the Threshold then press ok");
 run("Convert to Mask", "method=Default background=Dark calculate black");
@@ -46,6 +48,7 @@ for (i=0; i<NbImages-2; i++) {
   	//	Do the difference of image i+1 and i+2
 	imageCalculator("Difference create", ImageName1, ImageName2);
 	rename("Stack-" + i+1);
+	run("Subtract...", "value=254 stack");
 	roiManager("Select", 0);
 	roiManager("Measure");
   	
@@ -53,10 +56,12 @@ for (i=0; i<NbImages-2; i++) {
 	
 }
 
+close(ImageName+"*");
+roiManager("Deselect");
+roiManager("Delete");
 
-
-
-
+run("Images to Stack", "name=TEST title=Stack use");
+run("Enhance Contrast", "saturated=0.35");
 
 
 

@@ -16,7 +16,9 @@ ImageName = getTitle();
 selectWindow(ImageName);
 setAutoThreshold("Default dark");
 waitForUser("Threshold", "Check the Threshold then press ok");
-getThreshold(lower, upper);
+run("Convert to Mask", "method=Default background=Dark calculate black");
+makeRectangle(0, 0, 512, 512);
+roiManager("Add");
 
 	
 //	Separate the stack into single images
@@ -40,16 +42,9 @@ for (i=0; i<NbImages-2; i++) {
 			ImageName2 = ImageName + "-00" + i+2;
 		}
   	
-	//	Create masks based on thresholds
-	selectWindow(ImageName1);
-  	setThreshold(lower, upper);
-	run("Create Mask");
-	rename("Mask1");
-	selectWindow(ImageName2);
-  	setThreshold(lower, upper;
-	run("Create Mask");
-	rename("Mask2");
-  
+	imageCalculator("Difference create", ImageName1, ImageName2);
+	
+  	
 }
 
 

@@ -41,7 +41,7 @@ run("Threshold...");
 setAutoThreshold("Default dark");
 waitForUser("Threshold", "Check the Threshold then press ok");
 run("Convert to Mask", "method=Default background=Dark calculate black");
-run("Subtract...", "value=254");
+run("Subtract...", "value=254 stack");
 run("Enhance Contrast", "saturated=0.35");
 makeRectangle(0, 0, 512, 512);
 roiManager("Add");
@@ -63,7 +63,7 @@ ImageName = replace(ImageName, Extension, "");
 
 //	
 NbImages = nImages();
-for (i=0; i<NbImages-2; i++) {
+for (i=0; i<NbImages-1; i++) {
   //	Get image name in the right order
 	if (i+1<10) {
 		ImageName1 = ImageName + "-000" + i+1;

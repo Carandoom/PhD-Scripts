@@ -87,8 +87,8 @@ for (i=0; i<NbImages-1; i++) {
 	if (i==0) {
 		headings = split(String.getResultsHeadings);
 	}
-	value = getResult(headings[1], i)/MeanTotalPixels;
-	setResult("NbPxNorm", i, value);
+	NbPxNorm = getResult(headings[1], i)/MeanTotalPixels;
+	setResult("NbPxNorm", i, NbPxNorm);
 }
 
 close(ImageName+"*");

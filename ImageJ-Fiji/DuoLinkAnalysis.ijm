@@ -137,31 +137,37 @@ while (ContinueLoop) {
 	roiManager("Add");
 	for (i=0, i<NbSlices; i++) {
 		setSlice(i+1);
-		AnySignal = ;
-		if () {
+		roiManager("Select", 0);
+		roiManager("Measure");
+		if (i==0) {
+			headings = split(String.getResultsHeadings);
+		}
+		AnySignal = getResult(headings[1], i);
+		if (AnySignal<1) {
 			NbSlicesTosplit = NbSlicesTosplit - 1;
 			continue
 		}
 		run("Create Selection");
 		roiManager("Add");
 	}
-	
-	
-	
-	
-//	Create the selection
-	run("Create Selection");
-	roiManager("Add");
-	roiManager("Select", 0);
-	roiManager("Split");
 	roiManager("Select", 0);
 	roiManager("Delete");
-	roiManager("Show All without labels");
+	
+// for each slice with signal, split the ROI
+	for (i=0, i<NbSlicesTosplit; i++) {
+		roiManager("Select", 0);
+		roiManager("Split");
+		roiManager("Select", 0);
+		roiManager("Delete");
+	}
+	
+//	save ROIs
 	SaveName = replace(ImageName, Extension, "");
 	roiManager("deselect");
 	roiManager("save", dir1 + SaveName + "_cell" + x + ".zip");
 	roiManager("Delete");
 	close(title1);
+	close(title2);
 	x = x +1;
 	ContinueLoop = getBoolean("Select another cell ?");
 }

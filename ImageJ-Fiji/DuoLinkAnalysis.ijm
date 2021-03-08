@@ -19,30 +19,26 @@ if (roiManager("count")>0) {
 	roiManager("delete");
 }
 
-
 //	Split the channels and keep only red (duolink) and green (positive cells)
 ImageName = getTitle();
 dir1 = getDir("image");
 Extension = ".czi";
 run("Split Channels");
 close("C1-" + ImageName);
-//close("C3-" + ImageName);
 
 //	BG sub from fiji menu
 selectWindow("C2-" + ImageName);
+NbSlices = nSlices();
 run("Subtract Background...", "rolling=5 stack");
 resetMinAndMax();
 
-//	Z projection: Max projection
-run("Z Project...", "projection=[Max Intensity]");
-rename("Main");
-
 //	find maxima
 // Loop to get the right maxima segmentation
+waitForUser("Maxima", "Choose the slice for maxima preview then press ok");
 NoNextMaxima = "";
 CustomMaxima = 1000;
 while (NoNextMaxima!="Yes") {
-	selectWindow("Main");
+	selectWindow("C2-" + ImageName);
 	MaximaMapName = "" + CustomMaxima + "_MaximaMap_Noise";
 	run("Duplicate...", "title=" + MaximaMapName);
 	run("Enhance Contrast", "saturated=0.1");
@@ -68,42 +64,80 @@ while (NoNextMaxima!="Yes") {
 		close(MaximaMapName);
 	}
 }
-run("Find Maxima...", "prominence=" + CustomMaxima + " output=[Segmented Particles]");
-rename("Segmented_Image");
 
-//	Set threshold
-selectWindow("Main");
+//	Get the maxima map for each slice
+y = 1;
+for (i=0; i<NbSlices; i++) {
+	selectWindow("C2-" + ImageName);
+	setSlice(i);
+	run("Find Maxima...", "prominence=" + CustomMaxima + " output=[Segmented Particles]");
+	rename("Stack-" + y);
+	y = y + 1;
+}
+run("Images to stack", "name=MaximaMap title=Stack use");
+
+//	Set threshold on the red stack
+selectWindow("C2-" + ImageName);
 setLocation(40, 50);
 run("Threshold...");
 setAutoThreshold("Default dark");
 waitForUser("Threshold", "Check the Threshold then press ok");
-run("Convert to Mask", "method=Default background=Dark calculate black");
-rename("mask");
+run("Convert to Mask", "method=Default background=Dark black");
 
-//	Separate the mask based on the maxima map
-imageCalculator("AND create", "mask", "Segmented_Image");
-rename("ResultOfMask");
 
-title = "temp";
+
+
+
+
+
+
+
+
+
+
+
+
+
+title1 = "tempGreen";
+title2 = "tempRed";
 ContinueLoop = true;
 x = 1;
 while (ContinueLoop) {
-	selectWindow("ResultOfMask");
-	run("Duplicate...", "title="+title);
+//	create ROI around the cell using the green channel
 	selectWindow("C3-" + ImageName);
+	run("Duplicate...", "title="+title1);
 	setLocation(40, 50);
 	waitForUser("ROI", "Create a ROI around the cell then press ok");
 	if (roiManager("count")!=1) {
 		print("ERROR, you need to create one ROI and then press OK");
-		close(title);
+		close(title1);
 		continue
 	}
-	selectWindow(title);
-	roiManager("Show All without labels");
+	selectWindow(title1);
 	roiManager("Select", 0);
 	run("Clear Outside");
 	roiManager("Delete");
-	//	Create the selection
+	
+//	Median filter on the croped cell and get the threshold based on the green channel
+	run("Median...", "radius=20 stack");
+	setAutoThreshold("Default dark");
+	waitForUser("Threshold", "Check the Threshold then press ok");
+	run("Convert to Mask", "method=Default background=Dark black");
+	
+//	get selection from green channel for each slice
+	for (i=0, i<NbSlices; i++) {
+		setSlice(i);
+		run("create selection");
+		roiManager("add");
+	}
+	
+//	remove outside green threshold in red channel
+	
+	
+	
+	
+	
+//	Create the selection
 	run("Create Selection");
 	roiManager("Add");
 	roiManager("Select", 0);
@@ -115,11 +149,38 @@ while (ContinueLoop) {
 	roiManager("deselect");
 	roiManager("save", dir1 + SaveName + "_cell" + x + ".zip");
 	roiManager("Delete");
-	close(title);
+	close(title1);
 	x = x +1;
 	ContinueLoop = getBoolean("Select another cell ?");
 }
 
 close("*");
+
+
+
+
+
+
+
+
+
+
+
+
+//	Separate the mask based on the maxima map
+imageCalculator("AND create", "mask", "Segmented_Image");
+rename("ResultOfMask");
+
+
+
+
+
+
+
+
+
+
+
+
 
 

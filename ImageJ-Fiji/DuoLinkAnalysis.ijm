@@ -65,17 +65,6 @@ while (NoNextMaxima!="Yes") {
 	}
 }
 
-//	Get the maxima map for each slice
-y = 1;
-for (i=0; i<NbSlices; i++) {
-	selectWindow("C2-" + ImageName);
-	setSlice(i);
-	run("Find Maxima...", "prominence=" + CustomMaxima + " output=[Segmented Particles]");
-	rename("Stack-" + y);
-	y = y + 1;
-}
-run("Images to stack", "name=MaximaMap title=Stack use");
-
 //	Set threshold on the red stack
 selectWindow("C2-" + ImageName);
 setLocation(40, 50);
@@ -83,6 +72,17 @@ run("Threshold...");
 setAutoThreshold("Default dark");
 waitForUser("Threshold", "Check the Threshold then press ok");
 run("Convert to Mask", "method=Default background=Dark black");
+
+//	Get the maxima map for each slice
+y = 1;
+for (i=0; i<NbSlices; i++) {
+	selectWindow("C2-" + ImageName);
+	setSlice(i+1);
+	run("Find Maxima...", "prominence=" + CustomMaxima + " output=[Segmented Particles]");
+	rename("Stack-" + y);
+	y = y + 1;
+}
+run("Images to Stack", "name=MaximaMap title=Stack use");
 
 //	Loop for each cell
 title1 = "tempGreen";
@@ -92,8 +92,9 @@ x = 1;
 while (ContinueLoop) {
 //	create ROI around the cell using the green channel
 	selectWindow("C3-" + ImageName);
-	run("Duplicate...", "title="+title1);
+	run("Duplicate...", "title=" + title1 + " duplicate");
 	setLocation(40, 50);
+	resetMinAndMax();
 	waitForUser("ROI", "Create a ROI around the cell then press ok");
 	if (roiManager("count")!=1) {
 		print("ERROR, you need to create one ROI and then press OK");
@@ -102,7 +103,7 @@ while (ContinueLoop) {
 	}
 	selectWindow(title1);
 	roiManager("Select", 0);
-	run("Clear Outside");
+	run("Clear Outside", "stack");
 	roiManager("Delete");
 	
 //	Median filter on the croped cell and get the threshold based on the green channel
@@ -112,20 +113,22 @@ while (ContinueLoop) {
 	run("Convert to Mask", "method=Default background=Dark black");
 	
 //	get selection from green channel for each slice
-	for (i=0, i<NbSlices; i++) {
-		setSlice(i);
-		run("create selection");
+	for (i=0; i<NbSlices; i++) {
+		setSlice(i+1);
+		run("Create Selection");
 		roiManager("add");
 	}
 	
 //	remove outside green threshold in red channel
 	selectWindow("C2-" + ImageName);
-	run("Duplicate...", "title="+title2);
-	for (i=0, i<NbSlices; i++) {
+	run("Duplicate...", "title=" + title2 + " duplicate");
+	for (i=0; i<NbSlices; i++) {
 		setSlice(i+1);
 		roiManager("Select", i);
 		run("Clear Outside", "slice");
 	}
+	roiManager("Deselect");
+	roiManager("Delete");
 	
 //	Use maxima map and threshold on the red channel
 	imageCalculator("AND create stack", title2, "MaximaMap");
@@ -135,9 +138,9 @@ while (ContinueLoop) {
 	NbSlicesTosplit = NbSlices;
 	makeRectangle(0, 0, 512, 512);
 	roiManager("Add");
-	for (i=0, i<NbSlices; i++) {
-		setSlice(i+1);
+	for (i=0; i<NbSlices; i++) {
 		roiManager("Select", 0);
+		setSlice(i+1);
 		roiManager("Measure");
 		if (i==0) {
 			headings = split(String.getResultsHeadings);
@@ -150,11 +153,12 @@ while (ContinueLoop) {
 		run("Create Selection");
 		roiManager("Add");
 	}
+	close("Results");
 	roiManager("Select", 0);
 	roiManager("Delete");
 	
 // for each slice with signal, split the ROI
-	for (i=0, i<NbSlicesTosplit; i++) {
+	for (i=0; i<NbSlicesTosplit; i++) {
 		roiManager("Select", 0);
 		roiManager("Split");
 		roiManager("Select", 0);
@@ -173,24 +177,3 @@ while (ContinueLoop) {
 }
 
 close("*");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

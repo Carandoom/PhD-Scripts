@@ -19,6 +19,16 @@
 %   Christopher HENRY - V1 - 2021-02-11
 %   
 
+%%  To add: 
+%   Add an error handling for mdl generation if no data
+%   Add the delta measurement
+%   Find a way to take data from previous macro ?
+%   add a data selection tool ?
+%   find a way to rearange the data and generate conditions to group the
+%   dishes in
+%
+%   /!\ Add a way to convert comma data into dot data /!\
+
 
 function FindSlope()
 
@@ -42,7 +52,7 @@ for i = 1:size(T,2)
         continue
     end
     try
-        pause(0.1);
+        pause(1);
         plot(ax(1),x,T(:,i),'Color', 'b');
         plot(ax(2),x,dydx(:,i),'Color', 'b');
         ylimPlot = ylim(ax(1));
@@ -259,4 +269,19 @@ function [] = PlotLinearFit(ax,T,x,dydx,val1,val2,i,mdl,FitValY,ThrGaussFit)
         'Marker','o',...
         'Color','r',...
         'LineStyle','none');
+end
+
+
+%%  DEBUG
+
+function DEBUG()
+    cd 'C:\Users\henryc\Desktop\GitHub\Matlab find slope'
+    T = readtable('DataTest2.txt');
+    T = table2array(T);
+    x = T(:,1);
+    T = T(:,2:end);
+    
+    test = fit(x(val1:val2),dydx(val1:val2,i),'gauss2');
+    plot(test(x(val1:val2)));
+
 end

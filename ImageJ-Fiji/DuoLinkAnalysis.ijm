@@ -84,20 +84,7 @@ setAutoThreshold("Default dark");
 waitForUser("Threshold", "Check the Threshold then press ok");
 run("Convert to Mask", "method=Default background=Dark black");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//	Loop for each cell
 title1 = "tempGreen";
 title2 = "tempRed";
 ContinueLoop = true;
@@ -132,7 +119,32 @@ while (ContinueLoop) {
 	}
 	
 //	remove outside green threshold in red channel
+	selectWindow("C2-" + ImageName);
+	run("Duplicate...", "title="+title2);
+	for (i=0, i<NbSlices; i++) {
+		setSlice(i+1);
+		roiManager("Select", i);
+		run("Clear Outside", "slice");
+	}
 	
+//	Use maxima map and threshold on the red channel
+	imageCalculator("AND create stack", title2, "MaximaMap");
+	rename("ThrMaxRed");
+	
+//	for each slice, create ROI from selection
+	NbSlicesTosplit = NbSlices;
+	makeRectangle(0, 0, 512, 512);
+	roiManager("Add");
+	for (i=0, i<NbSlices; i++) {
+		setSlice(i+1);
+		AnySignal = ;
+		if () {
+			NbSlicesTosplit = NbSlicesTosplit - 1;
+			continue
+		}
+		run("Create Selection");
+		roiManager("Add");
+	}
 	
 	
 	
@@ -162,14 +174,6 @@ close("*");
 
 
 
-
-
-
-
-
-//	Separate the mask based on the maxima map
-imageCalculator("AND create", "mask", "Segmented_Image");
-rename("ResultOfMask");
 
 
 

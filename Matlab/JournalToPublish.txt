@@ -1,0 +1,3 @@
+Journals where I could publish some of my Matlab codes
+https://joss.theoj.org/
+https://academic.oup.com/bioinformatics

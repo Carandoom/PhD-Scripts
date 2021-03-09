@@ -4,3 +4,5 @@ https://academic.oup.com/bioinformatics:
   https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6041959/
   https://academic.oup.com/bioinformatics/article/32/12/1917/1744327?searchresult=1
 https://www.ipol.im/pub/art/
+https://ebooks.iospress.nl/publication/54353
+https://peerj.com/computer-science/

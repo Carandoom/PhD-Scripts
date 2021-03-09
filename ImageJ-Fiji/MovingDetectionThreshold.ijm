@@ -43,7 +43,9 @@ waitForUser("Threshold", "Check the Threshold then press ok");
 run("Convert to Mask", "method=Default background=Dark calculate black");
 run("Subtract...", "value=254 stack");
 run("Enhance Contrast", "saturated=0.35");
-makeRectangle(0, 0, 512, 512);
+Width = getWidth();
+Height = getHeight();
+makeRectangle(0, 0, Width, Height);
 roiManager("Add");
 
 //	Get total number of pixels averaged on all the slices (above threshold)
@@ -97,39 +99,3 @@ roiManager("Delete");
 
 run("Images to Stack", "name=" + ImageName + " title=Stack use");
 run("Enhance Contrast", "saturated=0.35");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

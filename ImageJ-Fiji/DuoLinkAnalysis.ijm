@@ -136,7 +136,9 @@ while (ContinueLoop) {
 	
 //	for each slice, create ROI from selection
 	NbSlicesTosplit = NbSlices;
-	makeRectangle(0, 0, 512, 512);
+	Width = getWidth();
+	Height = getHeight();
+	makeRectangle(0, 0, Width, Height);
 	roiManager("Add");
 	for (i=0; i<NbSlices; i++) {
 		roiManager("Select", 0);

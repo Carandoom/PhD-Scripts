@@ -95,7 +95,7 @@ setLocation(750, 200);
 setAutoThreshold("Default dark");
 waitForUser("Threshold", "Check the Threshold then press ok");
 run("Convert to Mask", "method=Default background=Dark black");
-run("Options...", "iterations=10 count=5 black do=Open stack");
+run("Options...", "iterations=1 count=5 black do=Open stack");
 setLocation(75, 200);
 
 //	Get the maxima map for each slice

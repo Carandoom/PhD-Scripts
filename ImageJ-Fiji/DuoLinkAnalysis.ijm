@@ -137,7 +137,8 @@ while (ContinueLoop) {
 	run("Median...", "radius=20 stack");
 	run("Threshold...");
 	setLocation(750, 200);
-	setAutoThreshold("Default dark");
+	getThreshold(lower, upper);
+	setThreshold(100, upper);
 	waitForUser("Threshold", "Check the Threshold then press ok");
 	run("Convert to Mask", "method=Default background=Dark black");
 	
@@ -186,7 +187,7 @@ while (ContinueLoop) {
 		AnySignal = getResult(headings[2], i);
 		if (AnySignal<1) {
 			NbSlicesToSplit = NbSlicesToSplit - 1;
-			NbDots[i] = "false";
+			NbDots[i] = "NaN";
 			continue
 		}
 		run("Create Selection");
@@ -199,7 +200,7 @@ while (ContinueLoop) {
 // for each slice with signal, split the ROI
 	CumulativeCount = 0;
 	for (i=0; i<NbSlices; i++) {
-		if (NbDots[i]=="false") {
+		if (matches(NbDots[i], "NaN")==1) {
 			continue
 		}
 		roiManager("Select", 0);
@@ -227,7 +228,7 @@ while (ContinueLoop) {
 	close(title1);
 	close(title2);
 	for (i=0; i<NbSlices; i++) {
-		if (NbDots[i]=="false") {
+		if (matches(NbDots[i], "NaN")==1) {
 			NbDots[i] = 0;
 		}
 		print(titleLog, x + "\t" + i+1 + "\t" + NbDots[i]/AreaGreen[i] + "\t" + AreaGreen[i] + "\t" + NbDots[i]);
@@ -245,4 +246,3 @@ if (isOpen("Threshold")) {
 	close("Threshold");
 }
 close("*");
-

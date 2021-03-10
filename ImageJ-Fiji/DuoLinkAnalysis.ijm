@@ -87,7 +87,7 @@ run("Images to Stack", "name=MaximaMap title=Stack use");
 
 //	Loop for each cell
 titleLog = "Data Results";
-run("Text Window...", "name=["+titleLog+"] width=72 height=8 type=table");
+run("Table...", "name=["+titleLog+"] width=250 height=600");
 titleLog = "["+ titleLog +"]";
 title1 = "tempGreen";
 title2 = "tempRed";
@@ -200,7 +200,7 @@ while (ContinueLoop) {
 		if (NbDots[i]==false) {
 			NbDots[i] = 0;
 		}
-		print(titleLog, x + "/t" + i+1 + "/t" + AreaGreen[i] + "/t" + NbDots[i] + "/t" + NbDots[i]/AreaGreen[i];
+		print(titleLog, x + "\t" + i+1 + "\t" + AreaGreen[i] + "\t" + NbDots[i] + "\t" + NbDots[i]/AreaGreen[i]);
 	}
 	x = x +1;
 	ContinueLoop = getBoolean("Select another cell ?");

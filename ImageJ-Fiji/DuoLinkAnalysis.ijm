@@ -41,7 +41,7 @@ roiManager("Measure");
 roiManager("Select", 0);
 roiManager("Delete");
 headings = split(String.getResultsHeadings);
-
+run("Clear Results");
 
 //	Split the channels and keep only red (duolink) and green (positive cells)
 ImageName = getTitle();
@@ -156,17 +156,20 @@ while (ContinueLoop) {
 	makeRectangle(0, 0, Width, Height);
 	roiManager("Add");
 	for (i=0; i<NbSlices; i++) {
+		roiManager("select", 0);
 		setSlice(i+1);
-		AnySignal = getResult(headings[2], i);
+		roiManager("measure");
+		AnySignal = getResult(headings[2], 0);
 		if (AnySignal<1) {
 			AreaGreen[i] = 0;
 			continue
 		}
 		run("Create Selection");
 		roiManager("add");
-		roiManager("select", i);
+		roiManager("select", i+1);
 		roiManager("measure");
-		AreaGreen[i] = getResult(headings[0], i);
+		AreaGreen[i] = getResult(headings[0], 1);
+		run("Clear Results");
 	}
 	roiManager("Select", 0);
 	roiManager("Delete");

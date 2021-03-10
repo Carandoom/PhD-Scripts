@@ -174,13 +174,14 @@ while (ContinueLoop) {
 	Height = getHeight();
 	makeRectangle(0, 0, Width, Height);
 	roiManager("Add");
+	run("Clear Results");
 	for (i=0; i<NbSlices; i++) {
 		roiManager("Select", 0);
 		setSlice(i+1);
 		roiManager("Measure");
 		AnySignal = getResult(headings[2], i);
 		if (AnySignal<1) {
-			NbSlicesToSplit = NbSliceSTosplit - 1;
+			NbSlicesToSplit = NbSliceToSplit - 1;
 			NbDots[i] = "false";
 			continue
 		}
@@ -199,9 +200,8 @@ while (ContinueLoop) {
 		}
 		roiManager("Select", 0);
 		if (matches(Roi.getType, "composite")==0) {
-			continue
+			roiManager("Split");
 		}
-		roiManager("Split");
 		if (i!=0) {
 			NbDots[i] = roiManager("count") - CumulativeCount - (NbSlicesToSplit-i);
 		}
@@ -209,8 +209,10 @@ while (ContinueLoop) {
 			NbDots[i] = roiManager("count") - (NbSlicesToSplit);
 		}
 		CumulativeCount = CumulativeCount + NbDots[i];
-		roiManager("Select", 0);
-		roiManager("Delete");
+		if (matches(Roi.getType, "composite")==0) {
+			roiManager("Select", 0);
+			roiManager("Delete");
+		}
 	}
 
 //	save ROIs

@@ -18,6 +18,8 @@ if (roiManager("count")>0) {
 	roiManager("deselect");
 	roiManager("delete");
 }
+roiManager("deselect");
+setLocation(1250, 550);
 run("Set Measurements...", "area integrated redirect=None decimal=2");
 
 //	Split the channels and keep only red (duolink) and green (positive cells)
@@ -76,7 +78,7 @@ while (NoNextMaxima!="Yes") {
 selectWindow("C2-" + ImageName);
 setLocation(50, 350);
 run("Threshold...");
-setLocation(800, 300);
+setLocation(750, 460);
 setAutoThreshold("Default dark");
 waitForUser("Threshold", "Check the Threshold then press ok");
 run("Convert to Mask", "method=Default background=Dark black");
@@ -97,7 +99,7 @@ setLocation(750, 150);
 //	Loop for each cell
 titleLog = "Data Results";
 run("Table...", "name=["+titleLog+"] width=350 height=500");
-setLocation(1100, 200);
+setLocation(750, 460);
 titleLog = "["+ titleLog +"]";
 title1 = "tempGreen";
 title2 = "tempRed";
@@ -205,12 +207,12 @@ while (ContinueLoop) {
 	roiManager("Delete");
 	close(title1);
 	close(title2);
-	print(titleLog, "\\Headings:Cell\tSlice\tArea\tNbDots\tDensity");
+	print(titleLog, "\\Headings:Cell\tSlice\tDensity\tArea\tNbDots");
 	for (i=0; i<NbSlices; i++) {
 		if (NbDots[i]==false) {
 			NbDots[i] = 0;
 		}
-		print(titleLog, x + "\t" + i+1 + "\t" + AreaGreen[i] + "\t" + NbDots[i] + "\t" + NbDots[i]/AreaGreen[i]);
+		print(titleLog, x + "\t" + i+1 + "\t" + NbDots[i]/AreaGreen[i] + "\t" + AreaGreen[i] + "\t" + NbDots[i]);
 	}
 	x = x +1;
 	ContinueLoop = getBoolean("Select another cell ?");

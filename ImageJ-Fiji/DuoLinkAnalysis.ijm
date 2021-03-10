@@ -113,10 +113,17 @@ while (ContinueLoop) {
 	run("Convert to Mask", "method=Default background=Dark black");
 	
 //	get selection from green channel for each slice
+	AreaGreen = newArray(NbSlices);
 	for (i=0; i<NbSlices; i++) {
 		setSlice(i+1);
 		run("Create Selection");
 		roiManager("add");
+		roiManager("select", i);
+		if (i==0) {
+			headings = split(String.getResultsHeadings);
+		}
+		roiManager("measure");
+		AreaGreen[i] = getResult(headings[1], i);
 	}
 	
 //	remove outside green threshold in red channel
@@ -159,13 +166,23 @@ while (ContinueLoop) {
 	roiManager("Select", 0);
 	roiManager("Delete");
 	
+	
+	
+	
+	
 // for each slice with signal, split the ROI
+	NbDots = newArray(NbSlices);
 	for (i=0; i<NbSlicesTosplit; i++) {
 		roiManager("Select", 0);
 		roiManager("Split");
 		roiManager("Select", 0);
 		roiManager("Delete");
+		
 	}
+	
+	
+	
+	
 	
 //	save ROIs
 	SaveName = replace(ImageName, Extension, "");
@@ -179,3 +196,15 @@ while (ContinueLoop) {
 }
 
 close("*");
+
+
+/*
+To add:
+extract the values and plot them in the Results, and export it in a txt file:
+	number of dots per cell
+	density using green area
+*/
+
+
+
+

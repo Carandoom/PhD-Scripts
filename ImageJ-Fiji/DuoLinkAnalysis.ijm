@@ -20,6 +20,8 @@ if (roiManager("count")>0) {
 }
 roiManager("deselect");
 setLocation(1250, 550);
+run("Brightness/Contrast...");
+setLocation(1200, 460);
 run("Set Measurements...", "area integrated redirect=None decimal=2");
 
 //	Split the channels and keep only red (duolink) and green (positive cells)
@@ -37,9 +39,9 @@ resetMinAndMax();
 
 //	Relocate the windows
 selectWindow("C3-" + ImageName);
-setLocation(750, 150);
+setLocation(75, 200);
 selectWindow("C2-" + ImageName);
-setLocation(750, 150);
+setLocation(75, 200);
 
 //	find maxima
 // Loop to get the right maxima segmentation
@@ -52,7 +54,7 @@ while (NoNextMaxima!="Yes") {
 	run("Duplicate...", "title=" + MaximaMapName);
 	run("Enhance Contrast", "saturated=0.1");
 	run("Find Maxima...", "noise=" + CustomMaxima + " output=[Point Selection]");
-	setLocation(50, 350);
+	setLocation(75, 200);
 // Open a dialog to ask if we keep this segmentation or not
 	waitForUser("Maxima", "Check the Maxima then press ok");
 	Dialog.create("Maxima map");
@@ -76,13 +78,13 @@ while (NoNextMaxima!="Yes") {
 
 //	Set threshold on the red stack
 selectWindow("C2-" + ImageName);
-setLocation(50, 350);
+setLocation(75, 200);
 run("Threshold...");
 setLocation(750, 460);
 setAutoThreshold("Default dark");
 waitForUser("Threshold", "Check the Threshold then press ok");
 run("Convert to Mask", "method=Default background=Dark black");
-setLocation(750, 150);
+setLocation(75, 200);
 
 //	Get the maxima map for each slice
 y = 1;
@@ -94,7 +96,7 @@ for (i=0; i<NbSlices; i++) {
 	y = y + 1;
 }
 run("Images to Stack", "name=MaximaMap title=Stack use");
-setLocation(750, 150);
+setLocation(75, 200);
 
 //	Loop for each cell
 titleLog = "Data Results";
@@ -109,7 +111,7 @@ while (ContinueLoop) {
 //	create ROI around the cell using the green channel
 	selectWindow("C3-" + ImageName);
 	run("Duplicate...", "title=" + title1 + " duplicate");
-	setLocation(40, 50);
+	setLocation(75, 200);
 	resetMinAndMax();
 	waitForUser("ROI", "Create a ROI around the cell then press ok");
 	if (roiManager("count")!=1) {
@@ -125,6 +127,7 @@ while (ContinueLoop) {
 //	Median filter on the croped cell and get the threshold based on the green channel
 	run("Median...", "radius=20 stack");
 	setAutoThreshold("Default dark");
+	setLocation(750, 460);
 	waitForUser("Threshold", "Check the Threshold then press ok");
 	run("Convert to Mask", "method=Default background=Dark black");
 	
@@ -156,6 +159,7 @@ while (ContinueLoop) {
 //	Use maxima map and threshold on the red channel
 	imageCalculator("AND create stack", title2, "MaximaMap");
 	rename("ThrMaxRed");
+	setLocation(75, 200);
 	
 //	for each slice, create ROI from selection
 	NbSlicesToSplit = NbSlices;

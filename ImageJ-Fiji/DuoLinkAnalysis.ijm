@@ -18,6 +18,14 @@ if (roiManager("count")>0) {
 	roiManager("deselect");
 	roiManager("delete");
 }
+titleLog = "Data Results";
+if (isOpen(titleLog)) {
+	close(titleLog);
+}
+run("Table...", "name=["+titleLog+"] width=350 height=500");
+setLocation(750, 460);
+titleLog = "["+ titleLog +"]";
+print(titleLog, "\\Headings:Cell\tSlice\tDensity\tArea\tNbDots");
 roiManager("deselect");
 selectWindow("ROI Manager");
 setLocation(1250, 575);
@@ -102,11 +110,6 @@ run("Images to Stack", "name=MaximaMap title=Stack use");
 setLocation(75, 200);
 
 //	Loop for each cell
-titleLog = "Data Results";
-run("Table...", "name=["+titleLog+"] width=350 height=500");
-setLocation(750, 460);
-titleLog = "["+ titleLog +"]";
-print(titleLog, "\\Headings:Cell\tSlice\tDensity\tArea\tNbDots");
 title1 = "tempGreen";
 title2 = "tempRed";
 ContinueLoop = true;
@@ -181,7 +184,7 @@ while (ContinueLoop) {
 		roiManager("Measure");
 		AnySignal = getResult(headings[2], i);
 		if (AnySignal<1) {
-			NbSlicesToSplit = NbSliceToSplit - 1;
+			NbSlicesToSplit = NbSlicesToSplit - 1;
 			NbDots[i] = "false";
 			continue
 		}
@@ -199,7 +202,7 @@ while (ContinueLoop) {
 			continue
 		}
 		roiManager("Select", 0);
-		if (matches(Roi.getType, "composite")==0) {
+		if (matches(Roi.getType, "composite")==1) {
 			roiManager("Split");
 		}
 		if (i!=0) {

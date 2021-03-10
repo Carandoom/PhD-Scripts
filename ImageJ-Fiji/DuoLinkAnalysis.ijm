@@ -18,6 +18,7 @@ if (roiManager("count")>0) {
 	roiManager("deselect");
 	roiManager("delete");
 }
+run("Set Measurements...", "area integrated redirect=None decimal=2");
 
 //	Split the channels and keep only red (duolink) and green (positive cells)
 ImageName = getTitle();
@@ -119,11 +120,11 @@ while (ContinueLoop) {
 		run("Create Selection");
 		roiManager("add");
 		roiManager("select", i);
+		roiManager("measure");
 		if (i==0) {
 			headings = split(String.getResultsHeadings);
 		}
-		roiManager("measure");
-		AreaGreen[i] = getResult(headings[1], i);
+		AreaGreen[i] = getResult(headings[0], i);
 	}
 	
 //	remove outside green threshold in red channel
@@ -151,10 +152,7 @@ while (ContinueLoop) {
 		roiManager("Select", 0);
 		setSlice(i+1);
 		roiManager("Measure");
-		if (i==0) {
-			headings = split(String.getResultsHeadings);
-		}
-		AnySignal = getResult(headings[1], i);
+		AnySignal = getResult(headings[2], i);
 		if (AnySignal<1) {
 			NbSlicesTosplit = NbSlicesTosplit - 1;
 			continue
@@ -177,7 +175,7 @@ while (ContinueLoop) {
 		roiManager("Split");
 		roiManager("Select", 0);
 		roiManager("Delete");
-		
+		NbDots += roiManager("count") - NbDots.getSequence(i);
 	}
 	
 	

@@ -87,7 +87,7 @@ run("Images to Stack", "name=MaximaMap title=Stack use");
 
 //	Loop for each cell
 titleLog = "Data Results";
-run("Table...", "name=["+titleLog+"] width=250 height=600");
+run("Table...", "name=["+titleLog+"] width=350 height=500");
 titleLog = "["+ titleLog +"]";
 title1 = "tempGreen";
 title2 = "tempRed";

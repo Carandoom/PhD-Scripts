@@ -86,6 +86,9 @@ for (i=0; i<NbSlices; i++) {
 run("Images to Stack", "name=MaximaMap title=Stack use");
 
 //	Loop for each cell
+titleLog = "Data Results";
+run("Text Window...", "name=["+titleLog+"] width=72 height=8 type=table");
+titleLog = "["+ titleLog +"]";
 title1 = "tempGreen";
 title2 = "tempRed";
 ContinueLoop = true;
@@ -192,12 +195,12 @@ while (ContinueLoop) {
 	roiManager("Delete");
 	close(title1);
 	close(title2);
-	titleLog = "Dot Density";
+	print(titleLog, "\\Headings:Cell\tSlice\tArea\tNbDots\tDensity");
 	for (i=0; i<NbSlices; i++) {
 		if (NbDots[i]==false) {
 			NbDots[i] = 0;
 		}
-		print("["+ titleLog +"]", "Cell" + x + " Slice" + i+1 + " has density " + NbDots[i]/AreaGreen[i] + " dots per area units /n");
+		print(titleLog, x + "/t" + i+1 + "/t" + AreaGreen[i] + "/t" + NbDots[i] + "/t" + NbDots[i]/AreaGreen[i];
 	}
 	x = x +1;
 	ContinueLoop = getBoolean("Select another cell ?");

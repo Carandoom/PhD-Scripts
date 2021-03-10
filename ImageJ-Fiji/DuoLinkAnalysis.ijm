@@ -22,6 +22,8 @@ titleLog = "Data Results";
 if (isOpen(titleLog)) {
 	close(titleLog);
 }
+Width = getWidth();
+Height = getHeight();
 run("Table...", "name=["+titleLog+"] width=350 height=500");
 setLocation(750, 460);
 titleLog = "["+ titleLog +"]";
@@ -33,6 +35,13 @@ run("Brightness/Contrast...");
 selectWindow("B&C");
 setLocation(1275, 175);
 run("Set Measurements...", "area integrated redirect=None decimal=2");
+makeRectangle(0, 0, Width, Height);
+roiManager("Add");
+roiManager("Measure");
+roiManager("Select", 0);
+roiManager("Delete");
+headings = split(String.getResultsHeadings);
+
 
 //	Split the channels and keep only red (duolink) and green (positive cells)
 ImageName = getTitle();
@@ -144,24 +153,30 @@ while (ContinueLoop) {
 	
 //	get selection from green channel for each slice
 	AreaGreen = newArray(NbSlices);
+	makeRectangle(0, 0, Width, Height);
+	roiManager("Add");
 	for (i=0; i<NbSlices; i++) {
 		setSlice(i+1);
+		AnySignal = getResult(headings[2], i);
+		if (AnySignal<1) {
+			AreaGreen[i] = 0;
+			continue
+		}
 		run("Create Selection");
 		roiManager("add");
 		roiManager("select", i);
 		roiManager("measure");
-		if (i==0) {
-			headings = split(String.getResultsHeadings);
-		}
 		AreaGreen[i] = getResult(headings[0], i);
 	}
+	roiManager("Select", 0);
+	roiManager("Delete");
 	
 //	remove outside green threshold in red channel
 	selectWindow("C2-" + ImageName);
 	run("Duplicate...", "title=" + title2 + " duplicate");
 	for (i=0; i<NbSlices; i++) {
 		if (AreaGreen[i]<1) {
-			makeRectangle(0, 0, 512, 512);
+			makeRectangle(0, 0, Width, Height);
 			setBackgroundColor(0, 0, 0);
 			run("Clear", "slice");
 			run("Select None");
@@ -182,8 +197,6 @@ while (ContinueLoop) {
 //	for each slice, create ROI from selection
 	NbSlicesToSplit = NbSlices;
 	NbDots = newArray(NbSlices);
-	Width = getWidth();
-	Height = getHeight();
 	makeRectangle(0, 0, Width, Height);
 	roiManager("Add");
 	run("Clear Results");

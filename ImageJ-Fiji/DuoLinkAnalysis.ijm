@@ -167,18 +167,20 @@ while (ContinueLoop) {
 	roiManager("Delete");
 	
 // for each slice with signal, split the ROI
+	CumulativeCount = 0;
 	for (i=0; i<NbSlices; i++) {
-		if (NbSlicesToSplit[i]=="false") {
+		if (NbDots[i]=="false") {
 			continue
 		}
 		roiManager("Select", 0);
 		roiManager("Split");
 		if (i!=0) {
-			NbDots[i] = roiManager("count") - NbDots.getSequence(i) - (NbSlicesToSplit-i);
+			NbDots[i] = roiManager("count") - CumulativeCount - (NbSlicesToSplit-i);
 		}
 		else if (i==0) {
 			NbDots[i] = roiManager("count") - (NbSlicesToSplit);
 		}
+		CumulativeCount = CumulativeCount + NbDots[i];
 		roiManager("Select", 0);
 		roiManager("Delete");
 	}
@@ -191,8 +193,11 @@ while (ContinueLoop) {
 	close(title1);
 	close(title2);
 	titleLog = "Dot Density";
-	for (i=0; i<NbSlicesToSplit; i++) {
-		print("["+ titleLog +"]", "Slice ");
+	for (i=0; i<NbSlices; i++) {
+		if (NbDots[i]==false) {
+			NbDots[i] = 0;
+		}
+		print("["+ titleLog +"]", "Cell" + x + " Slice" + i+1 + " has density " + NbDots[i]/AreaGreen[i] + " dots per area units /n");
 	}
 	x = x +1;
 	ContinueLoop = getBoolean("Select another cell ?");
@@ -201,12 +206,7 @@ while (ContinueLoop) {
 close("*");
 
 
-/*
-To add:
-extract the values and plot them in the Results, and export it in a txt file:
-	number of dots per cell
-	density using green area
-*/
+
 
 
 

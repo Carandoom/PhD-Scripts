@@ -226,7 +226,7 @@ while (ContinueLoop) {
 	close(title1);
 	close(title2);
 	for (i=0; i<NbSlices; i++) {
-		if (NbDots[i]==false) {
+		if (NbDots[i]=="false") {
 			NbDots[i] = 0;
 		}
 		print(titleLog, x + "\t" + i+1 + "\t" + NbDots[i]/AreaGreen[i] + "\t" + AreaGreen[i] + "\t" + NbDots[i]);

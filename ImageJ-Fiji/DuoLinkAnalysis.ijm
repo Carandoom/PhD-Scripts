@@ -19,9 +19,11 @@ if (roiManager("count")>0) {
 	roiManager("delete");
 }
 roiManager("deselect");
-setLocation(1250, 550);
+selectWindow("ROI Manager");
+setLocation(1250, 575);
 run("Brightness/Contrast...");
-setLocation(1200, 460);
+selectWindow("B&C");
+setLocation(1275, 175);
 run("Set Measurements...", "area integrated redirect=None decimal=2");
 
 //	Split the channels and keep only red (duolink) and green (positive cells)
@@ -80,7 +82,8 @@ while (NoNextMaxima!="Yes") {
 selectWindow("C2-" + ImageName);
 setLocation(75, 200);
 run("Threshold...");
-setLocation(750, 460);
+selectWindow("Threshold");
+setLocation(750, 200);
 setAutoThreshold("Default dark");
 waitForUser("Threshold", "Check the Threshold then press ok");
 run("Convert to Mask", "method=Default background=Dark black");
@@ -103,6 +106,7 @@ titleLog = "Data Results";
 run("Table...", "name=["+titleLog+"] width=350 height=500");
 setLocation(750, 460);
 titleLog = "["+ titleLog +"]";
+print(titleLog, "\\Headings:Cell\tSlice\tDensity\tArea\tNbDots");
 title1 = "tempGreen";
 title2 = "tempRed";
 ContinueLoop = true;
@@ -111,6 +115,7 @@ while (ContinueLoop) {
 //	create ROI around the cell using the green channel
 	selectWindow("C3-" + ImageName);
 	run("Duplicate...", "title=" + title1 + " duplicate");
+	selectWindow(title1);
 	setLocation(75, 200);
 	resetMinAndMax();
 	waitForUser("ROI", "Create a ROI around the cell then press ok");
@@ -126,8 +131,9 @@ while (ContinueLoop) {
 	
 //	Median filter on the croped cell and get the threshold based on the green channel
 	run("Median...", "radius=20 stack");
+	run("Threshold...");
+	setLocation(750, 200);
 	setAutoThreshold("Default dark");
-	setLocation(750, 460);
 	waitForUser("Threshold", "Check the Threshold then press ok");
 	run("Convert to Mask", "method=Default background=Dark black");
 	
@@ -211,7 +217,6 @@ while (ContinueLoop) {
 	roiManager("Delete");
 	close(title1);
 	close(title2);
-	print(titleLog, "\\Headings:Cell\tSlice\tDensity\tArea\tNbDots");
 	for (i=0; i<NbSlices; i++) {
 		if (NbDots[i]==false) {
 			NbDots[i] = 0;
@@ -221,12 +226,13 @@ while (ContinueLoop) {
 	x = x +1;
 	ContinueLoop = getBoolean("Select another cell ?");
 }
-
+if (isOpen("B&C")) {
+	close("B&C");
+}
+if (isOpen("ROI Manager")) {
+	close("ROI Manager");
+}
+if (isOpen("Threshold")) {
+	close("Threshold");
+}
 close("*");
-
-
-
-
-
-
-

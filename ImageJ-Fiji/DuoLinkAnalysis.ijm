@@ -198,6 +198,9 @@ while (ContinueLoop) {
 			continue
 		}
 		roiManager("Select", 0);
+		if (matches(Roi.getType, "composite")==0) {
+			continue
+		}
 		roiManager("Split");
 		if (i!=0) {
 			NbDots[i] = roiManager("count") - CumulativeCount - (NbSlicesToSplit-i);
@@ -236,3 +239,12 @@ if (isOpen("Threshold")) {
 	close("Threshold");
 }
 close("*");
+
+
+
+
+
+
+
+
+

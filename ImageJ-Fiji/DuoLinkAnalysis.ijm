@@ -173,9 +173,14 @@ while (ContinueLoop) {
 	for (i=0; i<NbSlicesTosplit; i++) {
 		roiManager("Select", 0);
 		roiManager("Split");
+		if (i!=0) {
+			NbDots[i] = roiManager("count") - NbDots.getSequence(i) - (NbSlicesTosplit-i);
+		}
+		else if (i==0) {
+			NbDots[i] = roiManager("count") - (NbSlicesTosplit);
+		}
 		roiManager("Select", 0);
 		roiManager("Delete");
-		NbDots += roiManager("count") - NbDots.getSequence(i);
 	}
 	
 	

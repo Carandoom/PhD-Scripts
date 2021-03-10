@@ -143,7 +143,8 @@ while (ContinueLoop) {
 	rename("ThrMaxRed");
 	
 //	for each slice, create ROI from selection
-	NbSlicesTosplit = NbSlices;
+	NbSlicesToSplit = NbSlices;
+	NbDots = newArray(NbSlices);
 	Width = getWidth();
 	Height = getHeight();
 	makeRectangle(0, 0, Width, Height);
@@ -154,7 +155,8 @@ while (ContinueLoop) {
 		roiManager("Measure");
 		AnySignal = getResult(headings[2], i);
 		if (AnySignal<1) {
-			NbSlicesTosplit = NbSlicesTosplit - 1;
+			NbSlicesToSplit = NbSliceSTosplit - 1;
+			NbDots[i] = "false";
 			continue
 		}
 		run("Create Selection");
@@ -164,29 +166,23 @@ while (ContinueLoop) {
 	roiManager("Select", 0);
 	roiManager("Delete");
 	
-	
-	
-	
-	
 // for each slice with signal, split the ROI
-	NbDots = newArray(NbSlices);
-	for (i=0; i<NbSlicesTosplit; i++) {
+	for (i=0; i<NbSlices; i++) {
+		if (NbSlicesToSplit[i]=="false") {
+			continue
+		}
 		roiManager("Select", 0);
 		roiManager("Split");
 		if (i!=0) {
-			NbDots[i] = roiManager("count") - NbDots.getSequence(i) - (NbSlicesTosplit-i);
+			NbDots[i] = roiManager("count") - NbDots.getSequence(i) - (NbSlicesToSplit-i);
 		}
 		else if (i==0) {
-			NbDots[i] = roiManager("count") - (NbSlicesTosplit);
+			NbDots[i] = roiManager("count") - (NbSlicesToSplit);
 		}
 		roiManager("Select", 0);
 		roiManager("Delete");
 	}
-	
-	
-	
-	
-	
+
 //	save ROIs
 	SaveName = replace(ImageName, Extension, "");
 	roiManager("deselect");
@@ -194,6 +190,10 @@ while (ContinueLoop) {
 	roiManager("Delete");
 	close(title1);
 	close(title2);
+	titleLog = "Dot Density";
+	for (i=0; i<NbSlicesToSplit; i++) {
+		print("["+ titleLog +"]", "Slice ");
+	}
 	x = x +1;
 	ContinueLoop = getBoolean("Select another cell ?");
 }

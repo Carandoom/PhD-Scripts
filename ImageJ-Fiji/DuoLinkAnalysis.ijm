@@ -33,6 +33,12 @@ NbSlices = nSlices();
 run("Subtract Background...", "rolling=5 stack");
 resetMinAndMax();
 
+//	Relocate the windows
+selectWindow("C3-" + ImageName);
+setLocation(750, 150);
+selectWindow("C2-" + ImageName);
+setLocation(750, 150);
+
 //	find maxima
 // Loop to get the right maxima segmentation
 waitForUser("Maxima", "Choose the slice for maxima preview then press ok");
@@ -44,8 +50,8 @@ while (NoNextMaxima!="Yes") {
 	run("Duplicate...", "title=" + MaximaMapName);
 	run("Enhance Contrast", "saturated=0.1");
 	run("Find Maxima...", "noise=" + CustomMaxima + " output=[Point Selection]");
+	setLocation(50, 350);
 // Open a dialog to ask if we keep this segmentation or not
-	setLocation(40, 50);
 	waitForUser("Maxima", "Check the Maxima then press ok");
 	Dialog.create("Maxima map");
 	Dialog.addMessage("Maxima map with noise set to " + CustomMaxima);
@@ -68,11 +74,13 @@ while (NoNextMaxima!="Yes") {
 
 //	Set threshold on the red stack
 selectWindow("C2-" + ImageName);
-setLocation(40, 50);
+setLocation(50, 350);
 run("Threshold...");
+setLocation(800, 300);
 setAutoThreshold("Default dark");
 waitForUser("Threshold", "Check the Threshold then press ok");
 run("Convert to Mask", "method=Default background=Dark black");
+setLocation(750, 150);
 
 //	Get the maxima map for each slice
 y = 1;
@@ -84,10 +92,12 @@ for (i=0; i<NbSlices; i++) {
 	y = y + 1;
 }
 run("Images to Stack", "name=MaximaMap title=Stack use");
+setLocation(750, 150);
 
 //	Loop for each cell
 titleLog = "Data Results";
 run("Table...", "name=["+titleLog+"] width=350 height=500");
+setLocation(1100, 200);
 titleLog = "["+ titleLog +"]";
 title1 = "tempGreen";
 title2 = "tempRed";

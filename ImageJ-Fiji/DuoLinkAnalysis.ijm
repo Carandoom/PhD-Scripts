@@ -160,6 +160,13 @@ while (ContinueLoop) {
 	selectWindow("C2-" + ImageName);
 	run("Duplicate...", "title=" + title2 + " duplicate");
 	for (i=0; i<NbSlices; i++) {
+		if (AreaGreen[i]<1) {
+			makeRectangle(0, 0, 512, 512);
+			setBackgroundColor(0, 0, 0);
+			run("Clear", "slice");
+			run("Select None");
+			continue
+		}
 		setSlice(i+1);
 		roiManager("Select", i);
 		run("Clear Outside", "slice");

@@ -224,26 +224,24 @@ while (ContinueLoop) {
 	
 // for each slice with signal, split the ROI
 	CumulativeCount = 0;
-	y = 0;
 	for (i=0; i<NbSlices; i++) {
 		if (matches(NbDots[i], "NaN")==1) {
+			continue
+		}
+		if (AreaGreen[i]<1) {
 			continue
 		}
 		roiManager("Select", 0);
 		if (matches(Roi.getType, "composite")==1) {
 			roiManager("Split");
 		}
-		if (i!=0) {
-			NbDots[i] = roiManager("count") - CumulativeCount - (NbSlicesToSplit-y);
-		}
-		else if (i==0) {
-			NbDots[i] = roiManager("count") - (NbSlicesToSplit);
-		}
+		NbDots[i] = roiManager("count") - CumulativeCount - (NbSlicesToSplit);
 		CumulativeCount = CumulativeCount + NbDots[i];
+		roiManager("Select", 0);
 		if (matches(Roi.getType, "composite")==1) {
-			y = y + 1;
 			roiManager("Select", 0);
 			roiManager("Delete");
+			NbSlicesToSplit = NbSlicesToSplit - 1;
 		}
 	}
 

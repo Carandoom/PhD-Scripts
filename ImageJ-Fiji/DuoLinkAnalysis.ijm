@@ -264,6 +264,9 @@ while (ContinueLoop) {
 	x = x +1;
 	ContinueLoop = getBoolean("Select another cell ?");
 }
+if (isOpen("Results")) {
+	close("Results");
+}
 if (isOpen("B&C")) {
 	close("B&C");
 }

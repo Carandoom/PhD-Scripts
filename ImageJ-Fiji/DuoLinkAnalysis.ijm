@@ -174,9 +174,13 @@ while (ContinueLoop) {
 	roiManager("Select", 0);
 	roiManager("Delete");
 	
+	
+	
+	
 //	remove outside green threshold in red channel
 	selectWindow("C2-" + ImageName);
 	run("Duplicate...", "title=" + title2 + " duplicate");
+	y = 1;
 	for (i=0; i<NbSlices; i++) {
 		if (AreaGreen[i]<1) {
 			makeRectangle(0, 0, Width, Height);
@@ -186,11 +190,15 @@ while (ContinueLoop) {
 			continue
 		}
 		setSlice(i+1);
-		roiManager("Select", i);
+		roiManager("Select", y);
 		run("Clear Outside", "slice");
+		y = y + 1;
 	}
 	roiManager("Deselect");
 	roiManager("Delete");
+	
+	
+	
 	
 //	Use maxima map and threshold on the red channel
 	imageCalculator("AND create stack", title2, "MaximaMap");

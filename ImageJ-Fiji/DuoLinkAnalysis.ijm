@@ -174,9 +174,6 @@ while (ContinueLoop) {
 	roiManager("Select", 0);
 	roiManager("Delete");
 	
-	
-	
-	
 //	remove outside green threshold in red channel
 	selectWindow("C2-" + ImageName);
 	run("Duplicate...", "title=" + title2 + " duplicate");
@@ -196,9 +193,6 @@ while (ContinueLoop) {
 	}
 	roiManager("Deselect");
 	roiManager("Delete");
-	
-	
-	
 	
 //	Use maxima map and threshold on the red channel
 	imageCalculator("AND create stack", title2, "MaximaMap");
@@ -224,12 +218,13 @@ while (ContinueLoop) {
 		run("Create Selection");
 		roiManager("Add");
 	}
-	close("Results");
+	run("Clear Results");
 	roiManager("Select", 0);
 	roiManager("Delete");
 	
 // for each slice with signal, split the ROI
 	CumulativeCount = 0;
+	y = 0;
 	for (i=0; i<NbSlices; i++) {
 		if (matches(NbDots[i], "NaN")==1) {
 			continue
@@ -239,13 +234,14 @@ while (ContinueLoop) {
 			roiManager("Split");
 		}
 		if (i!=0) {
-			NbDots[i] = roiManager("count") - CumulativeCount - (NbSlicesToSplit-i);
+			NbDots[i] = roiManager("count") - CumulativeCount - (NbSlicesToSplit-y);
 		}
 		else if (i==0) {
 			NbDots[i] = roiManager("count") - (NbSlicesToSplit);
 		}
 		CumulativeCount = CumulativeCount + NbDots[i];
 		if (matches(Roi.getType, "composite")==1) {
+			y = y + 1;
 			roiManager("Select", 0);
 			roiManager("Delete");
 		}

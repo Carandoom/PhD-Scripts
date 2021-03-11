@@ -180,7 +180,7 @@ while (ContinueLoop) {
 //	remove outside green threshold in red channel
 	selectWindow("C2-" + ImageName);
 	run("Duplicate...", "title=" + title2 + " duplicate");
-	y = 1;
+	y = 0;
 	for (i=0; i<NbSlices; i++) {
 		if (AreaGreen[i]<1) {
 			makeRectangle(0, 0, Width, Height);
@@ -245,13 +245,16 @@ while (ContinueLoop) {
 			NbDots[i] = roiManager("count") - (NbSlicesToSplit);
 		}
 		CumulativeCount = CumulativeCount + NbDots[i];
-		if (matches(Roi.getType, "composite")==0) {
+		if (matches(Roi.getType, "composite")==1) {
 			roiManager("Select", 0);
 			roiManager("Delete");
 		}
 	}
 
 //	save ROIs
+	if (roiManager("count")==0) {
+		continue
+	}
 	SaveName = replace(ImageName, Extension, "");
 	roiManager("deselect");
 	roiManager("save", dir1 + SaveName + "_cell" + x + ".zip");

@@ -100,7 +100,7 @@ selectWindow("C2-" + ImageName);
 setLocation(75, 200);
 run("Threshold...");
 selectWindow("Threshold");
-setLocation(750, 200);
+setLocation(750, 175);
 setAutoThreshold("Default dark");
 waitForUser("Threshold", "Check the Threshold then press ok");
 run("Convert to Mask", "method=Default background=Dark black");
@@ -145,7 +145,7 @@ while (ContinueLoop) {
 //	Median filter on the croped cell and get the threshold based on the green channel
 	run("Median...", "radius=20 stack");
 	run("Threshold...");
-	setLocation(750, 200);
+	setLocation(750, 175);
 	getThreshold(lower, upper);
 	setThreshold(100, upper);
 	waitForUser("Threshold", "Check the Threshold then press ok");

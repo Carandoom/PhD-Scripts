@@ -218,22 +218,23 @@ while (ContinueLoop) {
 	run("Clear Results");
 	roiManager("Select", 0);
 	roiManager("Delete");
-	run("Clear Results");
+	run("Select None");
 	for (i=0; i<NbSlices; i++) {
 		setSlice(i+1);
 		if (AnySignal[i]<1) {
 			NbSlicesToSplit = NbSlicesToSplit - 1;
-			NbDots[i] = 0;
+			NbDots[i] = -1;
 			continue
 		}
 		run("Create Selection");
 		roiManager("Add");
+		run("Select None");
 	}
-		
+	
 // for each slice with signal, split the ROI
 	CumulativeCount = 0;
 	for (i=0; i<NbSlices; i++) {
-		if (NbDots[i]==0) {
+		if (NbDots[i] == -1) {
 			continue
 		}
 		if (AreaGreen[i]<1) {
@@ -264,7 +265,16 @@ while (ContinueLoop) {
 	close(title1);
 	close(title2);
 	for (i=0; i<NbSlices; i++) {
-		print(titleLog, x + "\t" + i+1 + "\t" + NbDots[i]/AreaGreen[i] + "\t" + AreaGreen[i] + "\t" + NbDots[i]);
+		if (NbDots[i] == -1) {
+			NbDots[i] = 0;
+		}
+		if (AreaGreen[i] == 0) {
+			Density = 0;
+		}
+		else {
+			Density = NbDots[i]/AreaGreen[i];
+		}
+		print(titleLog, x + "\t" + i+1 + "\t" + Density + "\t" + AreaGreen[i] + "\t" + NbDots[i]);
 	}
 	x = x +1;
 	ContinueLoop = getBoolean("Select another cell ?");

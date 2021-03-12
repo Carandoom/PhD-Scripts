@@ -35,13 +35,6 @@ run("Brightness/Contrast...");
 selectWindow("B&C");
 setLocation(1275, 175);
 run("Set Measurements...", "area integrated redirect=None decimal=2");
-makeRectangle(0, 0, Width, Height);
-roiManager("Add");
-roiManager("Measure");
-roiManager("Select", 0);
-roiManager("Delete");
-headings = split(String.getResultsHeadings);
-run("Clear Results");
 
 //	Split the channels and keep only red (duolink) and green (positive cells)
 ImageName = getTitle();
@@ -95,18 +88,6 @@ while (NoNextMaxima!="Yes") {
 	}
 }
 
-//	Set threshold on the red stack
-selectWindow("C2-" + ImageName);
-setLocation(75, 200);
-run("Threshold...");
-selectWindow("Threshold");
-setLocation(750, 175);
-setAutoThreshold("Default dark");
-waitForUser("Threshold", "Check the Threshold then press ok");
-run("Convert to Mask", "method=Default background=Dark black");
-run("Options...", "iterations=1 count=5 black do=Open stack");
-setLocation(75, 200);
-
 //	Get the maxima map for each slice
 y = 1;
 for (i=0; i<NbSlices; i++) {
@@ -117,6 +98,18 @@ for (i=0; i<NbSlices; i++) {
 	y = y + 1;
 }
 run("Images to Stack", "name=MaximaMap title=Stack use");
+setLocation(75, 200);
+
+//	Set threshold on the red stack
+selectWindow("C2-" + ImageName);
+setLocation(75, 200);
+run("Threshold...");
+selectWindow("Threshold");
+setLocation(750, 175);
+setAutoThreshold("Default dark");
+waitForUser("Threshold", "Check the Threshold then press ok");
+run("Convert to Mask", "method=Default background=Dark black");
+run("Options...", "iterations=1 count=5 black do=Open stack");
 setLocation(75, 200);
 
 //	Loop for each cell
@@ -141,44 +134,55 @@ while (ContinueLoop) {
 	roiManager("Select", 0);
 	run("Clear Outside", "stack");
 	roiManager("Delete");
+	run("Select None");
 	
 //	Median filter on the croped cell and get the threshold based on the green channel
 	run("Median...", "radius=20 stack");
 	run("Threshold...");
 	setLocation(750, 175);
-	getThreshold(lower, upper);
-	setThreshold(100, upper);
+	getMinAndMax(min, max);
+	setThreshold(100, max);
 	waitForUser("Threshold", "Check the Threshold then press ok");
 	run("Convert to Mask", "method=Default background=Dark black");
+	run("Options...", "iterations=1 count=5 black do=[Fill Holes] stack");
 	
 //	get selection from green channel for each slice
 	AreaGreen = newArray(NbSlices);
+	AnySignal = newArray(NbSlices);
 	makeRectangle(0, 0, Width, Height);
 	roiManager("Add");
+	roiManager("Select", 0);
+	roiManager("Multi Measure");
+	headings = split(String.getResultsHeadings);
 	for (i=0; i<NbSlices; i++) {
-		roiManager("select", 0);
-		setSlice(i+1);
-		roiManager("measure");
-		AnySignal = getResult(headings[2], 0);
-		if (AnySignal<1) {
+		AnySignal[i] = getResult(headings[2], i);
+	}
+	run("Clear Results");
+	roiManager("Select", 0);
+	roiManager("Delete");
+	run("Select None");
+	y = 0;
+	for (i=0; i<NbSlices; i++) {
+		if (AnySignal[i]<1) {
 			AreaGreen[i] = 0;
 			continue
 		}
+		setSlice(i+1);
 		run("Create Selection");
 		roiManager("add");
-		roiManager("select", i+1);
+		roiManager("select", y);
 		roiManager("measure");
-		AreaGreen[i] = getResult(headings[0], 1);
-		run("Clear Results");
+		headings = split(String.getResultsHeadings);
+		AreaGreen[i] = getResult(headings[0], y);
+		y = y + 1;
 	}
-	roiManager("Select", 0);
-	roiManager("Delete");
 	
 //	remove outside green threshold in red channel
 	selectWindow("C2-" + ImageName);
 	run("Duplicate...", "title=" + title2 + " duplicate");
 	y = 0;
 	for (i=0; i<NbSlices; i++) {
+		setSlice(i+1);
 		if (AreaGreen[i]<1) {
 			makeRectangle(0, 0, Width, Height);
 			setBackgroundColor(0, 0, 0);
@@ -186,7 +190,6 @@ while (ContinueLoop) {
 			run("Select None");
 			continue
 		}
-		setSlice(i+1);
 		roiManager("Select", y);
 		run("Clear Outside", "slice");
 		y = y + 1;
@@ -202,30 +205,35 @@ while (ContinueLoop) {
 //	for each slice, create ROI from selection
 	NbSlicesToSplit = NbSlices;
 	NbDots = newArray(NbSlices);
+	AnySignal = newArray(NbSlices);
+	selectWindow("ThrMaxRed");
 	makeRectangle(0, 0, Width, Height);
 	roiManager("Add");
+	roiManager("Select", 0);
+	roiManager("Multi Measure");
+	headings = split(String.getResultsHeadings);
+	for (i=0; i<NbSlices; i++) {
+		AnySignal[i] = getResult(headings[2], i);
+	}
+	run("Clear Results");
+	roiManager("Select", 0);
+	roiManager("Delete");
 	run("Clear Results");
 	for (i=0; i<NbSlices; i++) {
-		roiManager("Select", 0);
 		setSlice(i+1);
-		roiManager("Measure");
-		AnySignal = getResult(headings[2], i);
-		if (AnySignal<1) {
+		if (AnySignal[i]<1) {
 			NbSlicesToSplit = NbSlicesToSplit - 1;
-			NbDots[i] = "NaN";
+			NbDots[i] = 0;
 			continue
 		}
 		run("Create Selection");
 		roiManager("Add");
 	}
-	run("Clear Results");
-	roiManager("Select", 0);
-	roiManager("Delete");
-	
+		
 // for each slice with signal, split the ROI
 	CumulativeCount = 0;
 	for (i=0; i<NbSlices; i++) {
-		if (matches(NbDots[i], "NaN")==1) {
+		if (NbDots[i]==0) {
 			continue
 		}
 		if (AreaGreen[i]<1) {
@@ -235,7 +243,7 @@ while (ContinueLoop) {
 		if (matches(Roi.getType, "composite")==1) {
 			roiManager("Split");
 		}
-		NbDots[i] = roiManager("count") - CumulativeCount - (NbSlicesToSplit);
+		NbDots[i] = roiManager("count") - CumulativeCount - NbSlicesToSplit;
 		CumulativeCount = CumulativeCount + NbDots[i];
 		roiManager("Select", 0);
 		if (matches(Roi.getType, "composite")==1) {
@@ -256,9 +264,6 @@ while (ContinueLoop) {
 	close(title1);
 	close(title2);
 	for (i=0; i<NbSlices; i++) {
-		if (matches(NbDots[i], "NaN")==1) {
-			NbDots[i] = 0;
-		}
 		print(titleLog, x + "\t" + i+1 + "\t" + NbDots[i]/AreaGreen[i] + "\t" + AreaGreen[i] + "\t" + NbDots[i]);
 	}
 	x = x +1;

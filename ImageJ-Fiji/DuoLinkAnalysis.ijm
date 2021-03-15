@@ -22,6 +22,10 @@ titleLog = "Data Results";
 if (isOpen(titleLog)) {
 	close(titleLog);
 }
+if (nImages()!=1) {
+	print("ERROR, you need to open one stack with 3 channels");
+	exit
+}
 Width = getWidth();
 Height = getHeight();
 run("Table...", "name=["+titleLog+"] width=350 height=500");

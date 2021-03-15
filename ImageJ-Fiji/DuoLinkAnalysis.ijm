@@ -157,7 +157,6 @@ while (ContinueLoop) {
 	for (i=0; i<NbSlices; i++) {
 		AnySignal[i] = getResult(headings[2], i);
 	}
-	run("Clear Results");
 	roiManager("Select", 0);
 	roiManager("Delete");
 	run("Select None");
@@ -181,6 +180,7 @@ while (ContinueLoop) {
 	selectWindow("C2-" + ImageName);
 	run("Duplicate...", "title=" + title2 + " duplicate");
 	y = 0;
+	selectWindow(title2);
 	for (i=0; i<NbSlices; i++) {
 		setSlice(i+1);
 		if (AreaGreen[i]<1) {
@@ -215,7 +215,6 @@ while (ContinueLoop) {
 	for (i=0; i<NbSlices; i++) {
 		AnySignal[i] = getResult(headings[2], i);
 	}
-	run("Clear Results");
 	roiManager("Select", 0);
 	roiManager("Delete");
 	run("Select None");
@@ -233,6 +232,8 @@ while (ContinueLoop) {
 	
 // for each slice with signal, split the ROI
 	CumulativeCount = 0;
+	y = 0;
+	selectWindow("ThrMaxRed");
 	for (i=0; i<NbSlices; i++) {
 		if (NbDots[i] == -1) {
 			continue
@@ -240,17 +241,20 @@ while (ContinueLoop) {
 		if (AreaGreen[i]<1) {
 			continue
 		}
-		roiManager("Select", 0);
+		roiManager("Select", y);
+		print(Roi.getType);
 		if (matches(Roi.getType, "composite")==1) {
 			roiManager("Split");
 		}
 		NbDots[i] = roiManager("count") - CumulativeCount - NbSlicesToSplit;
 		CumulativeCount = CumulativeCount + NbDots[i];
-		roiManager("Select", 0);
 		if (matches(Roi.getType, "composite")==1) {
-			roiManager("Select", 0);
+			roiManager("Select", y);
 			roiManager("Delete");
 			NbSlicesToSplit = NbSlicesToSplit - 1;
+		}
+		if (matches(Roi.getType, "composite")!=1) {
+			y = y + 1;
 		}
 	}
 
@@ -264,6 +268,7 @@ while (ContinueLoop) {
 	roiManager("Delete");
 	close(title1);
 	close(title2);
+	close("ThrMaxRed");
 	for (i=0; i<NbSlices; i++) {
 		if (NbDots[i] == -1) {
 			NbDots[i] = 0;

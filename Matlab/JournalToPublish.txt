@@ -9,5 +9,5 @@ https://peerj.com/computer-science/                                             
 https://www.journals.elsevier.com/information-and-software-technology                         => Could be used to publish a short communication
 https://f1000research.com/about                                                               => Seems like a journal publishing a bit of everything including code
   Related: https://think.f1000research.com/software-tools/
-
+  https://f1000research.com/for-authors/article-guidelines/software-tool-articles?utm_source=CPB&utm_medium=cms&utm_campaign=JPD14380
 

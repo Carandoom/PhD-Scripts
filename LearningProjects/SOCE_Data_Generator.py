@@ -20,5 +20,14 @@ e = np.random.randint(65,72, size=(round(x/10),y))
 SOCE = np.concatenate((a,b,c,d,e), axis=0)
 x = SOCE.shape[0]
 
-# plot the SOCE trace corresponding to cell 3
-plt.plot(SOCE[:,3], 'ro')
+# get average from all the cells
+avgSOCE = np.mean(SOCE, axis=1)
+
+# create a linear poly fit of order 2 to the averaged data
+FitSOCE = np.polynomial.polynomial.Polynomial.fit(range(x), avgSOCE, 3).convert().coef
+FitFunction = FitSOCE[3]*np.power(range(x),3) + FitSOCE[2]*np.power(range(x),2) + FitSOCE[1]*range(x) + FitSOCE[0]  # for poly order 3
+#FitFunction = FitSOCE[2]*np.power(range(x),2) + FitSOCE[1]*range(x) + FitSOCE[0]  # for poly order 2
+
+# plot the SOCE average data and the fit
+plt.plot(avgSOCE, 'ro')
+plt.plot(FitFunction, 'b')

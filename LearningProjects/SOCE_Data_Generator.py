@@ -6,6 +6,7 @@
 # import libraries
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
 
 # set number of time points and number of cells
 x = 800
@@ -25,9 +26,20 @@ avgSOCE = np.mean(SOCE, axis=1)
 
 # create a linear poly fit of order 2 to the averaged data
 FitSOCE = np.polynomial.polynomial.Polynomial.fit(range(x), avgSOCE, 3).convert().coef
-FitFunction = FitSOCE[3]*np.power(range(x),3) + FitSOCE[2]*np.power(range(x),2) + FitSOCE[1]*range(x) + FitSOCE[0]  # for poly order 3
-#FitFunction = FitSOCE[2]*np.power(range(x),2) + FitSOCE[1]*range(x) + FitSOCE[0]  # for poly order 2
+FitFunction = FitSOCE[3]*np.power(range(x),3) + FitSOCE[2]*np.power(range(x),2) + FitSOCE[1]*range(x) + FitSOCE[0]
+
+# create subplot 2,1
+fig, (ax1,ax2) = plt.subplots(2)
 
 # plot the SOCE average data and the fit
-plt.plot(avgSOCE, 'ro')
-plt.plot(FitFunction, 'b')
+ax1.plot(avgSOCE, 'ro')
+ax1.plot(FitFunction, 'b')
+
+# alternatively, use scipy to fit the data
+def line(x, a, b, c, d):
+    return a * np.power(x,3) + b * np.power(x,2) + c * x + d
+popt, pcov = curve_fit(line, range(x), avgSOCE)
+FitFunctionSciPy = popt[0]*np.power(range(x),3) + popt[1]*np.power(range(x),2) + popt[2]*range(x) + popt[3]
+
+ax2.plot(avgSOCE, 'ro')
+ax2.plot(FitFunctionSciPy, 'b')

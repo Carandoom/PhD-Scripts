@@ -5,4 +5,4 @@ The scripts I generate are free of use, I only ask for a citation if you publish
 If you need any help understanding or using my scripts, feel free to contact me.
 I welcome any feedback too !
 
-I code in Matlab, ImageJ/Fiji (derived from Java), VBA and GraphPadPrism.
+I code in Matlab, ImageJ/Fiji (derived from Java), Python and VBA.
